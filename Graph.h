@@ -15,6 +15,8 @@ template <class T>
 class Vertex {
 	T info;
 	vector<Edge<T>  > adj;
+	//Vertex<T>::Vertex<T> path;
+	int dist;
 	bool visited;
 	void addEdge(Vertex<T> *dest, double w);
 	bool removeEdgeTo(Vertex<T> *d);
@@ -39,7 +41,7 @@ bool Vertex<T>::removeEdgeTo(Vertex<T> *d) {
 }
 
 template <class T>
-Vertex<T>::Vertex(T in): info(in), visited(false){}
+Vertex<T>::Vertex(T in): info(in), visited(false){/*path = NULL;*/ dist = 0;}
 
 
 template <class T>
@@ -75,6 +77,8 @@ public:
 	int maxNewChildren(Vertex<T> *v, T &inf) const;
 	vector<Vertex<T> * > getVertexSet() const;
 	int getNumVertex() const;
+	bool findVertex(const T &coise) const;
+	void dijkstra(Vertex<T> *v) const;
 };
 
 template <class T>
@@ -239,6 +243,48 @@ int Graph<T>::maxNewChildren(Vertex<T> *v, T &inf) const {
 	return maxChildren;
 }
 
+template<class T>
+bool Graph<T>::findVertex(const T &coise)const{
+	typename vector<Vertex<T> *>::iterator it = this->getVertexSet().begin();
+	typename vector<Vertex<T> *>::iterator ite = this->getVertexSet().end();
+	for(;it != ite; it++){
+		if(coise == (*it)->info){
+			return true;
+		}
+	}
+	return false;
+}
+
+template<class T>
+void Graph<T>::dijkstra(Vertex<T> *v) const{
+	typename vector<Vertex<T> *>::iterator it = this->getVertexSet().begin();
+	typename vector<Vertex<T> *>::iterator ite = this->getVertexSet().end();
+
+	for(; it != ite; it++){
+		//(*it)->path = NULL; one day...
+		(*it)->dist = 9999999;
+	}
+
+	it = this->getVertexSet().begin();
+
+	v->dist = 0;
+	priority_queue<Vertex<T> *> qehuehue;
+	qehuehue.push(v);
+
+	while(!qehuehue.empty()){
+		Vertex<T> *vert = qehuehue.top();
+		qehuehue.pop();
+		typename vector<Edge<T> >::iterator itt= (vert->adj).begin();
+		typename vector<Edge<T> >::iterator imtt= (vert->adj).end();
+		for(;itt != imtt; itt++){
+			Vertex<T> *w = itt->dest;
+			if(vert->dist + itt->weight < w->dist){
+				w->dist = vert->dist + itt->weight;
+				//w->path = vert; some day...
+			}
+		}
+	}
+}
 
 
 #endif /* GRAPH_H_ */
