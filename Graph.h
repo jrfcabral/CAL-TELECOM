@@ -6,21 +6,29 @@
 
 #include <vector>
 #include <queue>
+#include <boost/heap/fibonacci_heap.hpp>
 using namespace std;
+using namespace boost::heap;
 
 template <class T> class Edge;
 template <class T> class Graph;
+struct edge_comparator;
+struct vertex_comparator;
 
 template <class T>
-class Vertex {
+class Vertex{
 	T info;
 	vector<Edge<T>  > adj;
 	bool visited;
 	void addEdge(Vertex<T> *dest, double w);
 	bool removeEdgeTo(Vertex<T> *d);
+	typename boost::heap::fibonacci_heap<Vertex<T>*, compare<vertex_comparator> >::handle_type handle;
 public:
+	Vertex<T>* parent;
+	int key;
 	Vertex(T in);
 	friend class Graph<T>;
+
 };
 
 
@@ -51,8 +59,9 @@ void Vertex<T>::addEdge(Vertex<T> *dest, double w) {
 template <class T>
 class Edge {
 	Vertex<T> * dest;
-	double weight;
+	typename fibonacci_heap<Edge<T>, boost::heap::compare<edge_comparator> >::handle_type handle;
 public:
+	int weight;
 	Edge(Vertex<T> *d, double w);
 	friend class Graph<T>;
 	friend class Vertex<T>;
@@ -75,7 +84,74 @@ public:
 	int maxNewChildren(Vertex<T> *v, T &inf) const;
 	vector<Vertex<T> * > getVertexSet() const;
 	int getNumVertex() const;
+	Graph<T> prim();
 };
+
+
+struct edge_comparator{
+	bool operator()(const Edge<int> e1, const Edge<int> e2) const{
+		return e1.weight > e2.weight;
+	}
+};
+
+struct vertex_comparator{
+	bool operator()(const Vertex<int>* v1, const Vertex<int>* v2) const{
+		//cout << "comparing" << v1->key << "with" << v2->key << endl << (v1->key < v2->key) << endl;
+		return v1->key > v2->key;
+	}
+};
+
+template <class T>
+Graph<T> Graph<T>::prim(){
+
+	Graph<T> result = Graph<T>();
+	fibonacci_heap<Vertex<T>*, compare<vertex_comparator> > pq;
+	vertexSet.at(0)->key = 0;
+	vertexSet.at(0)->handle = pq.push(vertexSet.at(0));
+	for (unsigned int i = 1; i < vertexSet.size(); i++){
+		vertexSet.at(i)->key = 9999999;
+		vertexSet.at(i)->handle = pq.push(vertexSet.at(i));
+	}
+
+	while(pq.size()){
+		Vertex<T>* v = pq.top();
+		pq.pop();
+		cout << "escolhido o vertice com o numero " << v->info << endl;
+		for(unsigned int i = 0; i < v->adj.size(); i++){
+			Vertex<T>* d = v->adj.at(i).dest;
+			d->key = v->adj.at(i).weight;
+			d->parent = v;
+			pq.increase(d->handle);
+		}
+	}
+
+	return result;
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 template <class T>
 int Graph<T>::getNumVertex() const {
