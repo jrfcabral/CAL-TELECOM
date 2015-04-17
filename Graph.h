@@ -6,7 +6,12 @@
 
 #include <vector>
 #include <queue>
+#include <stdlib.h>
 #include <boost/heap/fibonacci_heap.hpp>
+#include <sstream>
+
+#include "graphviewer.h"
+
 using namespace std;
 using namespace boost::heap;
 
@@ -85,7 +90,29 @@ public:
 	vector<Vertex<T> * > getVertexSet() const;
 	int getNumVertex() const;
 	Graph<T> prim();
+	void view();
+
 };
+
+template <class T>
+void Graph<T>::view()
+{
+	GraphViewer* gv = new GraphViewer(1400,800, true);
+	int n = 0;
+	gv->createWindow(1400, 800);
+	for (unsigned int i = 0; i < vertexSet.size();i++){
+		gv->addNode(vertexSet.at(i)->info);
+		for(unsigned int j = 0; j < vertexSet.at(i)->adj.size();j++){
+			gv->addEdge(n++, vertexSet.at(i)->info, vertexSet.at(i)->adj.at(j).dest->info, EdgeType::DIRECTED);
+			stringstream ss;
+			ss << vertexSet.at(i)->adj.at(j).weight;
+			gv->setEdgeLabel((n-1), ss.str());
+
+		}
+	}
+	gv->rearrange();
+
+}
 
 
 struct edge_comparator{
@@ -111,20 +138,30 @@ Graph<T> Graph<T>::prim(){
 	for (unsigned int i = 1; i < vertexSet.size(); i++){
 		vertexSet.at(i)->key = 9999999;
 		vertexSet.at(i)->handle = pq.push(vertexSet.at(i));
+		vertexSet.at(i)->visited = false;
 	}
 
 	while(pq.size()){
 		Vertex<T>* v = pq.top();
+		v->visited = true;
+		result.addVertex(v->info);
+		if (v->parent)
+			result.addEdge(v->parent->info, v->info,v->key);
+
 		pq.pop();
-		cout << "escolhido o vertice com o numero " << v->info << endl;
+
+		cout << "Vertice de prioridade maxima era" << v->info << endl;
 		for(unsigned int i = 0; i < v->adj.size(); i++){
 			Vertex<T>* d = v->adj.at(i).dest;
-			d->key = v->adj.at(i).weight;
-			d->parent = v;
-			pq.increase(d->handle);
+			cout << "A analisar aresta que vai de " << v->info << " a " << d->info << endl;
+			if (d->key > v->adj.at(i).weight  && !d->visited){
+				d->key = v->adj.at(i).weight;
+				d->parent = v;
+				pq.increase(d->handle);
+				cout << "A diminuir o peso do vertice" << d->info << " para " << v->adj.at(i).weight <<endl;
+			}
 		}
 	}
-
 	return result;
 
 }
@@ -195,6 +232,8 @@ bool Graph<T>::removeVertex(const T &in) {
 
 template <class T>
 bool Graph<T>::addEdge(const T &sourc, const T &dest, double w) {
+	if (sourc == NULL)
+		return false;
 	typename vector<Vertex<T>*>::iterator it= vertexSet.begin();
 	typename vector<Vertex<T>*>::iterator ite= vertexSet.end();
 	int found=0;
