@@ -43,7 +43,7 @@ all: calgraph
 calgraph: $(OBJS) $(USER_OBJS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: GCC C++ Linker'
-	g++ -L/usr/include/c++/4.9.2 -o "calgraph" $(OBJS) $(USER_OBJS) $(LIBS)
+	g++ -L/usr/include/c++/4.9.2 -std=c++11 -o "calgraph" $(OBJS) $(USER_OBJS) $(LIBS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 

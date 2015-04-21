@@ -8,6 +8,7 @@
 #include <queue>
 #include <stdlib.h>
 #include <boost/heap/fibonacci_heap.hpp>
+#include <boost/heap/priority_queue.hpp>
 #include <sstream>
 
 #include "graphviewer.h"
@@ -89,7 +90,8 @@ public:
 	int maxNewChildren(Vertex<T> *v, T &inf) const;
 	vector<Vertex<T> * > getVertexSet() const;
 	int getNumVertex() const;
-	Graph<T> prim();
+	Graph<T> prim_pq();
+	Graph<T> prim_fh();
 	void view();
 
 };
@@ -112,6 +114,8 @@ void Graph<T>::view()
 	}
 	gv->rearrange();
 
+
+
 }
 
 
@@ -128,8 +132,59 @@ struct vertex_comparator{
 	}
 };
 
+
 template <class T>
-Graph<T> Graph<T>::prim(){
+Graph<T> Graph<T>::prim_pq(){
+
+	Graph<T> result = Graph<T>();
+	vector<Vertex<T>* > pq;
+	vertexSet.at(0)->key = 0;
+	pq.push_back(vertexSet.at(0));
+	for (unsigned int i = 1; i < vertexSet.size(); i++){
+		vertexSet.at(i)->key = 9999999;
+		vertexSet.at(i)->visited = false;
+		pq.push_back(vertexSet.at(i));
+	}
+	int k = pq.size();
+	while(k)
+	{
+		Vertex<T> *v;
+		unsigned int i;
+		unsigned int minkey = 9999999;
+		for(i = 0; i < pq.size(); i++){
+
+			//cout << "vertice " << pq.at(i)->info << endl;
+			if (pq.at(i)->key < minkey && !pq.at(i)->visited){
+				v = pq.at(i);
+			}
+
+
+		}
+
+		v->visited = true;
+		result.addVertex(v->info);
+		if (v->parent != NULL)
+		result.addEdge(v->info, v->parent->info, v->key);
+
+		k--;
+		for(unsigned int j = 0; j < v->adj.size(); j++)
+		{
+			Vertex<T>* d = v->adj.at(j).dest;
+			if (d->key > v->adj.at(j).weight  && !d->visited){
+				d->key = v->adj.at(j).weight;
+				d->parent = v;
+
+			}
+		}
+
+
+	}
+	return result;
+
+}
+
+template <class T>
+Graph<T> Graph<T>::prim_fh(){
 
 	Graph<T> result = Graph<T>();
 	fibonacci_heap<Vertex<T>*, compare<vertex_comparator> > pq;
@@ -150,15 +205,13 @@ Graph<T> Graph<T>::prim(){
 
 		pq.pop();
 
-		cout << "Vertice de prioridade maxima era" << v->info << endl;
+
 		for(unsigned int i = 0; i < v->adj.size(); i++){
 			Vertex<T>* d = v->adj.at(i).dest;
-			cout << "A analisar aresta que vai de " << v->info << " a " << d->info << endl;
 			if (d->key > v->adj.at(i).weight  && !d->visited){
 				d->key = v->adj.at(i).weight;
 				d->parent = v;
 				pq.increase(d->handle);
-				cout << "A diminuir o peso do vertice" << d->info << " para " << v->adj.at(i).weight <<endl;
 			}
 		}
 	}
@@ -232,8 +285,7 @@ bool Graph<T>::removeVertex(const T &in) {
 
 template <class T>
 bool Graph<T>::addEdge(const T &sourc, const T &dest, double w) {
-	if (sourc == NULL)
-		return false;
+
 	typename vector<Vertex<T>*>::iterator it= vertexSet.begin();
 	typename vector<Vertex<T>*>::iterator ite= vertexSet.end();
 	int found=0;
