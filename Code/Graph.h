@@ -24,7 +24,7 @@ template <class T>
 class Vertex{
 	T info;
 	vector<Edge<T>  > adj;
-	//Vertex<T>::Vertex<T> path;
+	Vertex<T> *path;
 	int dist;
 	bool visited;
 	void addEdge(Vertex<T> *dest, double w);
@@ -169,29 +169,6 @@ Graph<T> Graph<T>::prim(){
 	return result;
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 template <class T>
@@ -376,15 +353,15 @@ void Graph<T>::dijkstra(Vertex<T> *v) const{
 	typename vector<Vertex<T> *>::iterator ite = this->getVertexSet().end();
 
 	for(; it != ite; it++){
-		//(*it)->path = NULL; one day...
+		(*it)->path = NULL;
 		(*it)->dist = 9999999;
 	}
 
 	it = this->getVertexSet().begin();
 
 	v->dist = 0;
-	priority_queue<Vertex<T> *> qehuehue;
-	qehuehue.push(v);
+	fibonacci_heap<Vertex<T>*, compare<vertex_comparator> > qehuehue;
+	v->handle = qehuehue.push(v);
 
 	while(!qehuehue.empty()){
 		Vertex<T> *vert = qehuehue.top();
@@ -394,8 +371,15 @@ void Graph<T>::dijkstra(Vertex<T> *v) const{
 		for(;itt != imtt; itt++){
 			Vertex<T> *w = itt->dest;
 			if(vert->dist + itt->weight < w->dist){
+				int old_dist = w->dist;
 				w->dist = vert->dist + itt->weight;
-				//w->path = vert; some day...
+				w->path = vert;
+				if(old_dist ==  9999999){
+					w-> handle = qehuehue.push(w);
+				}
+				else{
+					qehuehue.increase(w->handle);
+				}
 			}
 		}
 	}
