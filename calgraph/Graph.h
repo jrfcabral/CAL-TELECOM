@@ -9,7 +9,7 @@
 #include <stdlib.h>
 #include <boost/heap/fibonacci_heap.hpp>
 #include <sstream>
-
+#include <ctime>
 #include "graphviewer.h"
 
 using namespace std;
@@ -93,7 +93,7 @@ public:
 	int getNumVertex() const;
 	Graph<T> prim();
 	void view();
-	void dijkstra(Vertex<T> *v, int range);
+	float dijkstra(Vertex<T> *v, int range);
 
 };
 
@@ -336,7 +336,10 @@ int Graph<T>::maxNewChildren(Vertex<T> *v, T &inf) const {
 }
 
 template<class T>
-void Graph<T>::dijkstra(Vertex<T> *v, int range){
+float Graph<T>::dijkstra(Vertex<T> *v, int range){
+
+	clock_t begin = clock(), end;
+
 
 	for(int i = 0; i < this->getNumVertex(); i++){
 		vertexSet.at(i)->path = NULL;
@@ -367,7 +370,7 @@ void Graph<T>::dijkstra(Vertex<T> *v, int range){
 			}
 		}
 	}
-	cout << "Estes prints sao para este caso especifico\n";
+	cout << "Node ---> distance to \"main\" node\n";
 	for(int i = 0; i < this->vertexSet.size(); i++){
 
 		cout << i+1 << "---> " << this->vertexSet.at(i)->dist << endl;
@@ -380,28 +383,11 @@ void Graph<T>::dijkstra(Vertex<T> *v, int range){
 
 	}
 
+	end = clock();
+	return (float)begin - end;
+
 
 }
-
-/*template <class T>
-bool Graph<T>::removeVertex(const T &in) {
-	typename vector<Vertex<T>*>::iterator it= vertexSet.begin();
-	typename vector<Vertex<T>*>::iterator ite= vertexSet.end();
-	for (; it!=ite; it++) {
-		if ((*it)->info == in) {
-			Vertex<T> * v= *it;
-			vertexSet.erase(it);
-			typename vector<Vertex<T>*>::iterator it1= vertexSet.begin();
-			typename vector<Vertex<T>*>::iterator it1e= vertexSet.end();
-			for (; it1!=it1e; it1++) {
-				(*it1)->removeEdgeTo(v);
-			}
-			delete v;
-			return true;
-		}
-	}
-	return false;
-}*/
 
 
 #endif /* GRAPH_H_ */
