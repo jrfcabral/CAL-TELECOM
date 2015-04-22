@@ -144,25 +144,27 @@ Graph<T> Graph<T>::prim(){
 		vertexSet.at(i)->handle = pq.push(vertexSet.at(i));
 		vertexSet.at(i)->visited = false;
 	}
-
+	bool first = true;
 	while(pq.size()){
 		Vertex<T>* v = pq.top();
 		v->visited = true;
 		result.addVertex(v->info);
-		if (v->parent)
+		if (!first){
 			result.addEdge(v->parent->info, v->info,v->key);
+		}
+		first = false;
 
 		pq.pop();
 
-		cout << "Vertice de prioridade maxima era" << v->info << endl;
+
 		for(unsigned int i = 0; i < v->adj.size(); i++){
 			Vertex<T>* d = v->adj.at(i).dest;
-			cout << "A analisar aresta que vai de " << v->info << " a " << d->info << endl;
+
 			if (d->key > v->adj.at(i).weight  && !d->visited){
 				d->key = v->adj.at(i).weight;
 				d->parent = v;
 				pq.increase(d->handle);
-				cout << "A diminuir o peso do vertice" << d->info << " para " << v->adj.at(i).weight <<endl;
+
 			}
 		}
 	}
@@ -213,8 +215,7 @@ bool Graph<T>::removeVertex(const T &in) {
 
 template <class T>
 bool Graph<T>::addEdge(const T &sourc, const T &dest, double w) {
-	if (sourc == NULL)
-		return false;
+
 	typename vector<Vertex<T>*>::iterator it= vertexSet.begin();
 	typename vector<Vertex<T>*>::iterator ite= vertexSet.end();
 	int found=0;
