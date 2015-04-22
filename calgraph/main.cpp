@@ -28,7 +28,7 @@ int main(){
 
 	graph.view();
 	cout << "out" << endl;
-	graph.dijkstra(graph.getVertexSet()[0]);
+	graph.dijkstra(graph.getVertexSet()[0], 11);
 	graph.view();
 	cout << "done" << endl;
 #ifndef unix

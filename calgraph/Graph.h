@@ -93,8 +93,7 @@ public:
 	int getNumVertex() const;
 	Graph<T> prim();
 	void view();
-	bool findVertex(const T &coise) const;
-	void dijkstra(Vertex<T> *v) const;
+	void dijkstra(Vertex<T> *v, int range);
 
 };
 
@@ -337,19 +336,7 @@ int Graph<T>::maxNewChildren(Vertex<T> *v, T &inf) const {
 }
 
 template<class T>
-bool Graph<T>::findVertex(const T &coise)const{
-	typename vector<Vertex<T> *>::iterator it = this->getVertexSet().begin();
-	typename vector<Vertex<T> *>::iterator ite = this->getVertexSet().end();
-	for(;it != ite; it++){
-		if(coise == (*it)->info){
-			return true;
-		}
-	}
-	return false;
-}
-
-template<class T>
-void Graph<T>::dijkstra(Vertex<T> *v) const{
+void Graph<T>::dijkstra(Vertex<T> *v, int range){
 
 	for(int i = 0; i < this->getNumVertex(); i++){
 		vertexSet.at(i)->path = NULL;
@@ -359,7 +346,7 @@ void Graph<T>::dijkstra(Vertex<T> *v) const{
 	v->dist = 0;
 	fibonacci_heap<Vertex<T>*, compare<vertex_comparator> > qehuehue;
 	v->handle = qehuehue.push(v);
-	cout << "It's working" << endl;
+
 	while(!qehuehue.empty()){
 		Vertex<T> *vert = qehuehue.top();
 		qehuehue.pop();
@@ -380,11 +367,41 @@ void Graph<T>::dijkstra(Vertex<T> *v) const{
 			}
 		}
 	}
-	for(int i = 0; i < this->getNumVertex(); i++){
-		cout << "Estes prints sao para este caso especifico\n";
+	cout << "Estes prints sao para este caso especifico\n";
+	for(int i = 0; i < this->vertexSet.size(); i++){
+
 		cout << i+1 << "---> " << this->vertexSet.at(i)->dist << endl;
+
+		if(this->vertexSet.at(i)->dist > range){
+			cout << "Removing node " << i+1 << endl;
+			this->removeVertex(this->vertexSet.at(i)->info);
+			i--;
+		}
+
 	}
+
+
 }
+
+/*template <class T>
+bool Graph<T>::removeVertex(const T &in) {
+	typename vector<Vertex<T>*>::iterator it= vertexSet.begin();
+	typename vector<Vertex<T>*>::iterator ite= vertexSet.end();
+	for (; it!=ite; it++) {
+		if ((*it)->info == in) {
+			Vertex<T> * v= *it;
+			vertexSet.erase(it);
+			typename vector<Vertex<T>*>::iterator it1= vertexSet.begin();
+			typename vector<Vertex<T>*>::iterator it1e= vertexSet.end();
+			for (; it1!=it1e; it1++) {
+				(*it1)->removeEdgeTo(v);
+			}
+			delete v;
+			return true;
+		}
+	}
+	return false;
+}*/
 
 
 #endif /* GRAPH_H_ */
