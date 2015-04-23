@@ -1,3 +1,4 @@
+
 /*
  * Graph.h
  */
@@ -8,6 +9,7 @@
 #include <queue>
 #include <stdlib.h>
 #include <boost/heap/fibonacci_heap.hpp>
+#include <ctime>
 #include <sstream>
 
 #include "graphviewer.h"
@@ -94,8 +96,7 @@ public:
 	Graph<T> prim();
 	void view();
 	bool findVertex(const T &coise) const;
-	void dijkstra(Vertex<T> *v) const;
-
+	void dijkstra(Vertex<T> *v, int range);
 };
 
 template <class T>
@@ -349,16 +350,15 @@ bool Graph<T>::findVertex(const T &coise)const{
 }
 
 template<class T>
-void Graph<T>::dijkstra(Vertex<T> *v) const{
-	typename vector<Vertex<T> *>::iterator it = this->getVertexSet().begin();
-	typename vector<Vertex<T> *>::iterator ite = this->getVertexSet().end();
+float Graph<T>::dijkstra(Vertex<T> *v, int range){
 
-	for(; it != ite; it++){
-		(*it)->path = NULL;
-		(*it)->dist = 9999999;
+	clock_t begin = clock(), end;
+
+
+	for(int i = 0; i < this->getNumVertex(); i++){
+		vertexSet.at(i)->path = NULL;
+		vertexSet.at(i)->dist = 9999999;
 	}
-
-	it = this->getVertexSet().begin();
 
 	v->dist = 0;
 	fibonacci_heap<Vertex<T>*, compare<vertex_comparator> > qehuehue;
@@ -376,7 +376,7 @@ void Graph<T>::dijkstra(Vertex<T> *v) const{
 				w->dist = vert->dist + itt->weight;
 				w->path = vert;
 				if(old_dist ==  9999999){
-					w-> handle = qehuehue.push(w);
+					w->handle = qehuehue.push(w);
 				}
 				else{
 					qehuehue.increase(w->handle);
@@ -384,7 +384,25 @@ void Graph<T>::dijkstra(Vertex<T> *v) const{
 			}
 		}
 	}
+	cout << "Node ---> distance to \"main\" node\n";
+	for(int i = 0; i < this->vertexSet.size(); i++){
+
+		cout << i+1 << "---> " << this->vertexSet.at(i)->dist << endl;
+
+		if(this->vertexSet.at(i)->dist > range){
+			cout << "Removing node " << i+1 << endl;
+			this->removeVertex(this->vertexSet.at(i)->info);
+			i--;
+		}
+
+	}
+
+	end = clock();
+	return (float)begin - end;
+
+
 }
+
 
 
 #endif /* GRAPH_H_ */

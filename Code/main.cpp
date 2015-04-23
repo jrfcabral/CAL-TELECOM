@@ -28,6 +28,16 @@ int main(){
 
 	graph.view();
 	cout << "out" << endl;
+
 	graph.prim().view();
 	cout << "done" << endl;
+
+	float dijkstra_elapsed = graph.dijkstra(graph.getVertexSet()[0], 11);
+	graph.view();
+	cout << "done" << endl;
+	cout << "Time spent on dijkstra: " << dijkstra_elapsed << " ms" << endl;
+#ifndef unix
+	cin.get();
+#endif
+
 }
