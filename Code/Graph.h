@@ -96,7 +96,7 @@ public:
 	Graph<T> prim();
 	void view();
 	bool findVertex(const T &coise) const;
-	void dijkstra(Vertex<T> *v, int range);
+	float dijkstra(Vertex<T> *v, int range);
 };
 
 template <class T>
@@ -399,9 +399,11 @@ float Graph<T>::dijkstra(Vertex<T> *v, int range){
 
 	end = clock();
 	return (float)begin - end;
-
-
 }
+
+
+
+
 
 
 

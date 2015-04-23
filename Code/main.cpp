@@ -3,6 +3,32 @@
 #include <boost/heap/fibonacci_heap.hpp>
 
 #include "Graph.h"
+
+Graph<int> randomGraph(int numVertex, int edgeProb){
+
+	srand(time(NULL));
+
+	Graph<int> graph = Graph<int>();
+	for(int i = 0; i < numVertex; i++){
+		graph.addVertex(i);
+	}
+
+	for(int j = 0; j < numVertex; j++){
+		for(int k = j+1; k < numVertex; k++){
+			if(rand() % 10 < edgeProb){
+				int randNum = rand() % 100;
+				graph.addEdge(j, k, randNum);
+				graph.addEdge(k, j, randNum);
+			}
+		}
+	}
+
+	return graph;
+}
+
+
+
+
 int main(){
 	Graph<int> graph = Graph<int>();
 
@@ -27,15 +53,16 @@ int main(){
 	graph.addEdge(6,3,1);
 
 	graph.view();
-	cout << "out" << endl;
-
-	graph.prim().view();
-	cout << "done" << endl;
 
 	float dijkstra_elapsed = graph.dijkstra(graph.getVertexSet()[0], 11);
 	graph.view();
+	graph.prim().view();
 	cout << "done" << endl;
 	cout << "Time spent on dijkstra: " << dijkstra_elapsed << " ms" << endl;
+
+	//Graph<int> gr = randomGraph(100, 4);
+	//gr.view();
+
 #ifndef unix
 	cin.get();
 #endif
