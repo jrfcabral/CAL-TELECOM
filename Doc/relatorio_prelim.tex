@@ -101,7 +101,7 @@ Para a resolução deste problema recorreu-se a dois algoritmos conhecidos que o
 
 \begin{algorithmic}[1]
 \Procedure{Dijkstra}{fonte, limite, grafo}
-\State $vértices \gets grafo.vértices$
+\State $vertices \gets grafo.vertices$
 \For{Q $\in$ vértices}
 \State $Q.dist \gets \infty$
 \State $Q.path \gets NULL$
@@ -110,7 +110,7 @@ Para a resolução deste problema recorreu-se a dois algoritmos conhecidos que o
 \State $FH.push(fonte)$
 \While{$FH \neq \varnothing$}
 \State $v \gets FH.pop()$
-\For{$a \in v.adjacências$}
+\For{$a \in v.adjacencias$}
 \If{$v.dist + w < a.dist$}
 	\State $a.dist \gets v.dist + w$
 	\State $a.path \gets v$
@@ -124,7 +124,7 @@ Para a resolução deste problema recorreu-se a dois algoritmos conhecidos que o
 \EndWhile
 \EndProcedure
 \Procedure{Podar grafo}{grafo, limite}
-\For{$v \in grafo.vértices$}
+\For{$v \in grafo.vertices$}
 \If{$v.dist > limite$}
 \State $grafo.removeVertice(v)$
 \EndIf
