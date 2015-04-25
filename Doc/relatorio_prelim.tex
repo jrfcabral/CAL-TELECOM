@@ -101,8 +101,8 @@ Para a resolução deste problema recorreu-se a dois algoritmos conhecidos que o
 
 \begin{algorithmic}[1]
 \Procedure{Dijkstra}{fonte, limite, grafo}
-\State $vertices \gets grafo.vertices$
-\For{Q $\in$ vertices}
+\State $vértices \gets grafo.vértices$
+\For{Q $\in$ vértices}
 \State $Q.dist \gets \infty$
 \State $Q.path \gets NULL$
 \EndFor
@@ -110,7 +110,7 @@ Para a resolução deste problema recorreu-se a dois algoritmos conhecidos que o
 \State $FH.push(fonte)$
 \While{$FH \neq \varnothing$}
 \State $v \gets FH.pop()$
-\For{$a \in v.adjacencias$}
+\For{$a \in v.adjacências$}
 \If{$v.dist + w < a.dist$}
 	\State $a.dist \gets v.dist + w$
 	\State $a.path \gets v$
@@ -124,7 +124,7 @@ Para a resolução deste problema recorreu-se a dois algoritmos conhecidos que o
 \EndWhile
 \EndProcedure
 \Procedure{Podar grafo}{grafo, limite}
-\For{$v \in grafo.vertices$}
+\For{$v \in grafo.vértices$}
 \If{$v.dist > limite$}
 \State $grafo.removeVertice(v)$
 \EndIf
@@ -138,19 +138,19 @@ O algoritmo de Dijkstra foi artilhado com a possibilidade de remover os nós cuj
 \begin{algorithmic}[1]
 \Procedure{Prim}{grafo}
 \State $novoGrafo \gets \varnothing$
-\State $vertices \gets grafo.vertices$
-\For{Q $\in$ vertices}
+\State $vértices \gets grafo.vértices$
+\For{Q $\in$ vértices}
 \State $Q.key \gets \infty$
 \State $Q.path \gets NULL$
 \State $Q.visited \gets false$
 \EndFor
-\State $FH.enqueue(vertices)$
+\State $FH.enqueue(vértices)$
 \While{$FH \neq \varnothing$}
 \State $v \gets FH.pop()$
 \State $novoGrafo \gets path(v, v.path)$
 \State $v.visited \gets true$
 \For{$a \in v.adj$}
-\If{$a.key > weight(v,a)$ AND $d.visited = gfalse $}
+\If{$a.key > weight(v,a)$ AND $d.visited = false $}
 \State $a.key \gets weight(v,a)$;
 \State $a.path \gets v$
 \State $a.decreaseKey()$
@@ -163,13 +163,13 @@ O algoritmo de Dijkstra foi artilhado com a possibilidade de remover os nós cuj
 
 
 \subsection{2º Problema/Fase}
-Para resolver este problema torna-se necessário identificar conjuntos de subgrafos desconexos. O algoritmo de Prim já identifica a arvore de expansão mínima de cada subgrafo desconexo, mas não efetua a identificação dos subgrafos desconexos em si mesmos. Tornou-se portanto necessário adaptar levemente o dito algoritmo. Em concreto, de cada vez que um vértice é removido da fila e não possui um antecessor o grafo construido até agora é guardado numa fila e começa a ser construído um novo grafo. Fica garantido o facto de não serem abandonados vértices do grafo anterior porque os vértices do próximo grafo são inicializados com uma chave infinita, só sendo retirados da queue quando todo o restante grafo já foi percorrido.
+Para resolver este problema torna-se necessário identificar conjuntos de sub grafos desconexos. O algoritmo de Prim já identifica a árvore de expansão mínima de cada sub grafo desconexo, mas não efetua a identificação dos sub grafos desconexos em si mesmos. Tornou-se portanto necessário adaptar levemente o dito algoritmo. Em concreto, de cada vez que um vértice é removido da fila e não possui um antecessor o grafo construido até agora é guardado numa fila e começa a ser construído um novo grafo. Fica garantido o facto de não serem abandonados vértices do grafo anterior porque os vértices do próximo grafo são inicializados com uma chave infinita, só sendo retirados da fila quando todo o restante grafo já foi percorrido.
 
 \section{Análise de complexidade}
 \subsection[Grafo]{Grafo\footnote{Analisam-se exclusivamente as operações do grafo utilizadas no programa desenvolvido.}}
 
 \subsubsection{Inserção de Vértices}
-No contexto da nossa aplicação optamos por utilizar uma implementação \emph{naïve} que se limita a acrescentar o vértice a um vector de vértices, sem verificar repetição de elementos. Tem uma complexidade $O(1)$.
+No contexto da nossa aplicação optamos por utilizar uma implementação \emph{naïve} que se limita a acrescentar o vértice a um vetor de vértices, sem verificar repetição de elementos. Tem uma complexidade $O(1)$.
 
 \subsubsection{Inserção de Arestas}
 É necessário percorrer o conjunto de vértices para verificar a existência do destino e da fonte da aresta. Tem portanto uma complexidade $O(V)$
@@ -178,12 +178,12 @@ No contexto da nossa aplicação optamos por utilizar uma implementação \emph{
 É necessário percorrer o conjunto de vértices para encontrar o vértice pretendido, e depois novamente para encontrar e apagar todas as arestas que apontam para este vértice. Tem por isso uma complexidade $O(V^2+E)$.
 
 
-\subsection{Algoritmos de Dijkstra}
-Sendo \emph{V} o número de vértices a analisar e \emph{E} o número de arestas, o algoritmo percorre primeiramente toda a lista de vértices para inicializar valores e acrescentar todos os vértices à fila de prioridade. Como estamos a empregar heaps de Fibonacci a operação de inserção tem complexidade constante, pelo que toda esta operação tem complexidade \emph{V}. De seguida percorre-se a fila de prioridade, recorrendo a função de extração do menor elemento da fila. Num heap de fibonacci esta operação correm em tempo $log(V)$. Obtem-se assim para este ciclo uma complxidade $Vlog(V)$. Dentro deste ciclo todas as arestas do grafo acabam por ser analisadas, sendo, quando encontrada uma aresta que constitua um caminho mais favorável, chamada a função DecreaseKey do fibanacci heap, que corre em tempo constante. Obtem-se assim uma complexidade linear $E$.
+\subsection{Algoritmo de Dijkstra}
+Sendo \emph{V} o número de vértices a analisar e \emph{E} o número de arestas, o algoritmo percorre primeiramente toda a lista de vértices para inicializar valores. Esta operação tem complexidade \emph{V}.Acrescenta-se, com complexidade $O(1)$, a fonte à fila de prioridade. De seguida percorre-se a fila de prioridade, recorrendo a função de extração do menor elemento da fila. Num heap de fibonacci esta operação corre em tempo $log(V)$. Obtém-se assim para este ciclo uma complexidade $Vlog(V)$. Dentro deste ciclo todas as arestas do grafo acabam por ser analisadas, sendo, quando encontrada uma aresta que constitua um caminho mais favorável, chamada a função DecreaseKey do Fibonacci heap, que corre em tempo constante. Obtém-se assim uma complexidade linear $E$.
 
 Por último, e como característica particular do problema em causa torna-se necessário percorrer novamente a lista de vértices no sentido de remover todos aqueles cuja distância à fonte seja excessiva. Dentro deste ciclo pode ou não ser chamada a função removeVertex, que na nossa implementação do grafo tem complexidade $V^2+ E$, ficando este ciclo com complexidade $V^3+VE$. Tem-se assim uma complexidade total $O(V+E+Vlog(V)+V(V^2+E)) = O(E+V(VlogV+V^2+E)$.
 \subsection{Algoritmo de Prim}
-Tem complexidade semelhante ao algoritmo de Dijkstra no ciclo principal. Contudo, de cada vez que um vértice é retirado da fila de prioridade o mesmo tem que ser adicionado ao grafo resultante (ou um novo grafo ser gerado, no caso de se tratar do primeiro elemento de um novo subgrafo), e uma aresta tem que ser adicionada de e para o seu predecessor. Como é possível ter referências diretas para a nova aresta e o seu predecessor esta operação pode ser feita em tempo constante $O(1)$. Ficamos assim com uma complexidade $O(E+VlogV)$.
+Tem complexidade semelhante ao algoritmo de Dijkstra no ciclo principal. Contudo, de cada vez que um vértice é retirado da fila de prioridade o mesmo tem que ser adicionado ao grafo resultante (ou um novo grafo ser gerado, no caso de se tratar do primeiro elemento de um novo sub grafo), e uma aresta tem que ser adicionada de e para o seu predecessor. Como é possível ter referências diretas para a nova aresta e o seu predecessor esta operação pode ser feita em tempo constante $O(1)$. Ficamos assim com uma complexidade $O(E+VlogV)$.
 
 \newpage
 \bibliographystyle{plain}
