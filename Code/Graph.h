@@ -158,7 +158,7 @@ Graph<T> Graph<T>::prim(){
 			subgraphs.push_back(result);
 			result = Graph<T>();
 			result.addVertex(v->info);
-			cout << "novo subgrafo detetado" << endl;
+			//cout << "novo subgrafo detetado" << endl;
 		}
 
 
@@ -177,8 +177,8 @@ Graph<T> Graph<T>::prim(){
 			}
 		}
 	}
-	for(int i = 0; i < subgraphs.size(); i++)
-		subgraphs.at(i).view();
+	//for(int i = 1; i < subgraphs.size(); i++)
+		//subgraphs.at(i).view();
 	return result;
 
 }
@@ -309,11 +309,11 @@ double Graph<T>::dijkstra(Vertex<T> *v, int range){
 	}
 
 
-	cout << "Node ---> keyance to \"main\" node\n";
+	//cout << "Node ---> keyance to \"main\" node\n";
 	for(unsigned int i = 0; i < this->vertexSet.size(); i++){
-		cout << i+1 << "---> " << this->vertexSet.at(i)->dist << endl;
+		//cout << i+1 << "---> " << this->vertexSet.at(i)->key << endl;
 		if(this->vertexSet.at(i)->key > range){
-			cout << "Removing node " << i+1 << endl;
+		//	cout << "Removing node " << i+1 << endl;
 			this->removeVertex(this->vertexSet.at(i)->info);
 			i--;
 		}
@@ -321,7 +321,7 @@ double Graph<T>::dijkstra(Vertex<T> *v, int range){
 	}
 
 	end = clock();
-	return (double)begin - end;
+	return (double)end-begin;
 }
 
 #endif /* GRAPH_H_ */
