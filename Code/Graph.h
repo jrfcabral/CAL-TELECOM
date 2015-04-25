@@ -83,20 +83,16 @@ Edge<T>::Edge(Vertex<T> *d, double w): dest(d), weight(w){}
 template <class T>
 class Graph {
 	vector<Vertex<T> *> vertexSet;
-	void dfs(Vertex<T> *v, vector<T> &res) const;
 public:
 	bool addVertex(const T &in);
 	bool addEdge(const T &sourc, const T &dest, double w);
 	bool removeVertex(const T &in);
 	bool removeEdge(const T &sourc, const T &dest);
-	vector<T> dfs() const;
-	vector<T> bfs(Vertex<T> *v) const;
-	int maxNewChildren(Vertex<T> *v, T &inf) const;
 	vector<Vertex<T> * > getVertexSet() const;
 	int getNumVertex() const;
 	Graph<T> prim();
 	void view();
-	bool findVertex(const T &coise) const;
+	bool findVertex(const T &info) const;
 	double dijkstra(Vertex<T> *v, int range);
 };
 
@@ -108,6 +104,7 @@ void Graph<T>::view()
 	gv->createWindow(1400, 800);
 	for (unsigned int i = 0; i < vertexSet.size();i++){
 		gv->addNode(vertexSet.at(i)->info);
+		gv->setVertexColor(vertexSet.at(i)->info, "black");
 		for(unsigned int j = 0; j < vertexSet.at(i)->adj.size();j++){
 			gv->addEdge(n++, vertexSet.at(i)->info, vertexSet.at(i)->adj.at(j).dest->info, EdgeType::DIRECTED);
 			stringstream ss;
@@ -138,6 +135,7 @@ template <class T>
 Graph<T> Graph<T>::prim(){
 
 	Graph<T> result = Graph<T>();
+	vector<Graph<T> > subgraphs;
 	fibonacci_heap<Vertex<T>*, compare<vertex_comparator> > pq;
 	vertexSet.at(0)->key = 0;
 	vertexSet.at(0)->handle = pq.push(vertexSet.at(0));
@@ -150,12 +148,19 @@ Graph<T> Graph<T>::prim(){
 	while(pq.size()){
 		Vertex<T>* v = pq.top();
 		v->visited = true;
-		result.addVertex(v->info);
+
 		if (v->hasParent){
+			result.addVertex(v->info);
 			result.addEdge(v->parent->info, v->info,v->key);
 		}
+		else{
+			subgraphs.push_back(result);
+			result = Graph<T>();
+			result.addVertex(v->info);
+			cout << "novo subgrafo detetado" << endl;
+		}
 
-		cout << "vertice " << v->info << endl;
+
 		pq.pop();
 
 
@@ -171,6 +176,8 @@ Graph<T> Graph<T>::prim(){
 			}
 		}
 	}
+	for(int i = 0; i < subgraphs.size(); i++)
+		subgraphs.at(i).view();
 	return result;
 
 }
@@ -252,93 +259,6 @@ bool Graph<T>::removeEdge(const T &sourc, const T &dest) {
 	return vS->removeEdgeTo(vD);
 }
 
-
-
-
-template <class T>
-vector<T> Graph<T>::dfs() const {
-	typename vector<Vertex<T>*>::const_iterator it= vertexSet.begin();
-	typename vector<Vertex<T>*>::const_iterator ite= vertexSet.end();
-	for (; it !=ite; it++)
-		(*it)->visited=false;
-	vector<T> res;
-	it=vertexSet.begin();
-	for (; it !=ite; it++)
-	    if ( (*it)->visited==false )
-	    	dfs(*it,res);
-	return res;
-}
-
-template <class T>
-void Graph<T>::dfs(Vertex<T> *v,vector<T> &res) const {
-	v->visited = true;
-	res.push_back(v->info);
-	typename vector<Edge<T> >::iterator it= (v->adj).begin();
-	typename vector<Edge<T> >::iterator ite= (v->adj).end();
-	for (; it !=ite; it++)
-	    if ( it->dest->visited == false )
-	    	dfs(it->dest, res);
-}
-
-template <class T>
-vector<T> Graph<T>::bfs(Vertex<T> *v) const {
-	vector<T> res;
-	queue<Vertex<T> *> q;
-	q.push(v);
-	v->visited = true;
-	while (!q.empty()) {
-		Vertex<T> *v1 = q.front();
-		q.pop();
-		res.push_back(v1->info);
-		typename vector<Edge<T> >::iterator it=v1->adj.begin();
-		typename vector<Edge<T> >::iterator ite=v1->adj.end();
-		for (; it!=ite; it++) {
-			Vertex<T> *d = it->dest;
-			if (d->visited==false) {
-				d->visited=true;
-				q.push(d);
-			}
-		}
-	}
-	return res;
-}
-
-template <class T>
-int Graph<T>::maxNewChildren(Vertex<T> *v, T &inf) const {
-	vector<T> res;
-	queue<Vertex<T> *> q;
-	queue<int> level;
-	int maxChildren=0;
-	inf =v->info;
-	q.push(v);
-	level.push(0);
-	v->visited = true;
-	while (!q.empty()) {
-		Vertex<T> *v1 = q.front();
-		q.pop();
-		res.push_back(v1->info);
-		int l=level.front();
-		level.pop(); l++;
-		int nChildren=0;
-		typename vector<Edge<T> >::iterator it=v1->adj.begin();
-		typename vector<Edge<T> >::iterator ite=v1->adj.end();
-		for (; it!=ite; it++) {
-			Vertex<T> *d = it->dest;
-			if (d->visited==false) {
-				d->visited=true;
-				q.push(d);
-				level.push(l);
-				nChildren++;
-			}
-		}
-		if (nChildren>maxChildren) {
-			maxChildren=nChildren;
-			inf = v1->info;
-		}
-	}
-	return maxChildren;
-}
-
 template<class T>
 bool Graph<T>::findVertex(const T &coise)const{
 	typename vector<Vertex<T> *>::iterator it = this->getVertexSet().begin();
@@ -386,9 +306,9 @@ double Graph<T>::dijkstra(Vertex<T> *v, int range){
 			}
 		}
 	}
-	cout << "Node ---> distance to \"main\" node\n";
-	for(int i = 0; i < this->vertexSet.size(); i++){
 
+	cout << "Node ---> keyance to \"main\" node\n";
+	for(unsigned int i = 0; i < this->vertexSet.size(); i++){
 		cout << i+1 << "---> " << this->vertexSet.at(i)->dist << endl;
 
 		if(this->vertexSet.at(i)->dist > range){
@@ -402,11 +322,5 @@ double Graph<T>::dijkstra(Vertex<T> *v, int range){
 	end = clock();
 	return (double)begin - end;
 }
-
-
-
-
-
-
 
 #endif /* GRAPH_H_ */
