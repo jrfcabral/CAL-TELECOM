@@ -22,25 +22,26 @@ template <class T> class Graph;
 struct edge_comparator;
 struct vertex_comparator;
 
+
 template <class T>
 class Vertex{
 	T info;
 	vector<Edge<T>  > adj;
 	Vertex<T> *path;
-	int dist;
+
 	bool visited;
 	void addEdge(Vertex<T> *dest, double w);
 	bool removeEdgeTo(Vertex<T> *d);
 	typename boost::heap::fibonacci_heap<Vertex<T>*, compare<vertex_comparator> >::handle_type handle;
 	bool hasParent = false;
 public:
+	int dist;
 	Vertex<T>* parent;
 	int key;
 	Vertex(T in);
 	friend class Graph<T>;
 
 };
-
 
 template <class T>
 bool Vertex<T>::removeEdgeTo(Vertex<T> *d) {
@@ -279,10 +280,10 @@ double Graph<T>::dijkstra(Vertex<T> *v, int range){
 
 	for(int i = 0; i < vertexSet.size(); i++){
 		vertexSet.at(i)->path = NULL;
-		vertexSet.at(i)->dist = 9999999;
+		vertexSet.at(i)->key = 9999999;
 	}
 
-	v->dist = 0;
+	v->key = 0;
 	fibonacci_heap<Vertex<T>*, compare<vertex_comparator> > qehuehue;
 	v->handle = qehuehue.push(v);
 
@@ -293,11 +294,11 @@ double Graph<T>::dijkstra(Vertex<T> *v, int range){
 		typename vector<Edge<T> >::iterator imtt= (vert->adj).end();
 		for(;itt != imtt; itt++){
 			Vertex<T> *w = itt->dest;
-			if(vert->dist + itt->weight < w->dist){
-				int old_dist = w->dist;
-				w->dist = vert->dist + itt->weight;
+			if(vert->key + itt->weight < w->key){
+				int old_key = w->key;
+				w->key = vert->key + itt->weight;
 				w->path = vert;
-				if(old_dist ==  9999999){
+				if(old_key ==  9999999){
 					w->handle = qehuehue.push(w);
 				}
 				else{
@@ -307,11 +308,11 @@ double Graph<T>::dijkstra(Vertex<T> *v, int range){
 		}
 	}
 
+
 	cout << "Node ---> keyance to \"main\" node\n";
 	for(unsigned int i = 0; i < this->vertexSet.size(); i++){
 		cout << i+1 << "---> " << this->vertexSet.at(i)->dist << endl;
-
-		if(this->vertexSet.at(i)->dist > range){
+		if(this->vertexSet.at(i)->key > range){
 			cout << "Removing node " << i+1 << endl;
 			this->removeVertex(this->vertexSet.at(i)->info);
 			i--;
