@@ -30,7 +30,7 @@ Graph<int> randomGraph(int numVertex, int edgeProb){
 
 
 int main(){
-	Graph<int> graph = Graph<int>();
+	/*Graph<int> graph = Graph<int>();
 
 	graph.addVertex(1);
 	graph.addVertex(2);
@@ -57,11 +57,15 @@ int main(){
 	float dijkstra_elapsed = graph.dijkstra(graph.getVertexSet()[0], 11);
 	graph.view();
 	graph.prim().view();
-	cout << "done" << endl;
-	cout << "Time spent on dijkstra: " << dijkstra_elapsed << " ms" << endl;
+	cout << "done" << endl;*/
 
-	//Graph<int> gr = randomGraph(100, 4);
-	//gr.view();
+	cout << "Starting Dijkstra complexity analysis.\n";
+	cout << "Sparse graphs with 30% chance of edge and a range constraint of 50.\n";
+	//for(int i = 5; i <= 1000; i++){
+		Graph<int> gr = randomGraph(100, 3);
+		gr.dijkstra(gr.getVertexSet()[1], 50);
+
+	//}
 
 #ifndef unix
 	cin.get();

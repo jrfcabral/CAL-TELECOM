@@ -32,6 +32,7 @@ class Vertex{
 	void addEdge(Vertex<T> *dest, double w);
 	bool removeEdgeTo(Vertex<T> *d);
 	typename boost::heap::fibonacci_heap<Vertex<T>*, compare<vertex_comparator> >::handle_type handle;
+	bool hasParent = false;
 public:
 	Vertex<T>* parent;
 	int key;
@@ -96,7 +97,7 @@ public:
 	Graph<T> prim();
 	void view();
 	bool findVertex(const T &coise) const;
-	float dijkstra(Vertex<T> *v, int range);
+	double dijkstra(Vertex<T> *v, int range);
 };
 
 template <class T>
@@ -145,16 +146,16 @@ Graph<T> Graph<T>::prim(){
 		vertexSet.at(i)->handle = pq.push(vertexSet.at(i));
 		vertexSet.at(i)->visited = false;
 	}
-	bool first = true;
+
 	while(pq.size()){
 		Vertex<T>* v = pq.top();
 		v->visited = true;
 		result.addVertex(v->info);
-		if (!first){
+		if (v->hasParent){
 			result.addEdge(v->parent->info, v->info,v->key);
 		}
-		first = false;
 
+		cout << "vertice " << v->info << endl;
 		pq.pop();
 
 
@@ -164,6 +165,7 @@ Graph<T> Graph<T>::prim(){
 			if (d->key > v->adj.at(i).weight  && !d->visited){
 				d->key = v->adj.at(i).weight;
 				d->parent = v;
+				d->hasParent = true;
 				pq.increase(d->handle);
 
 			}
@@ -350,12 +352,12 @@ bool Graph<T>::findVertex(const T &coise)const{
 }
 
 template<class T>
-float Graph<T>::dijkstra(Vertex<T> *v, int range){
+double Graph<T>::dijkstra(Vertex<T> *v, int range){
 
 	clock_t begin = clock(), end;
 
 
-	for(int i = 0; i < this->getNumVertex(); i++){
+	for(int i = 0; i < vertexSet.size(); i++){
 		vertexSet.at(i)->path = NULL;
 		vertexSet.at(i)->dist = 9999999;
 	}
@@ -398,7 +400,7 @@ float Graph<T>::dijkstra(Vertex<T> *v, int range){
 	}
 
 	end = clock();
-	return (float)begin - end;
+	return (double)begin - end;
 }
 
 
