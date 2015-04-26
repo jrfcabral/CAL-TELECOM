@@ -1,6 +1,6 @@
 #include <iostream>
 #include <fstream>
-#include <sstream>
+#include <cstdlib>
 #include "Graph.h"
 
 using namespace std;
@@ -38,7 +38,7 @@ Graph<int> loadGraph(char *filename){
 			else{
 				int origin, destiny;
 				double weight;
-				if(sscanf(line.c_str(), "%d;%d;%f", &origin, &destiny, &weight) != 3){
+				if(sscanf(line.c_str(), "%d;%d;%lf", &origin, &destiny, &weight) != 3){
 					cout << "O ficheiro nao esta formatado corretamente.\nO grafo podera nao representar aquilo que e esperado.\nENTER para continuar";
 					cin.get();
 					return graph;
@@ -49,6 +49,7 @@ Graph<int> loadGraph(char *filename){
 				}
 			}
 		}
+		gurph.close();
 	}
 	return graph;
 }
@@ -160,28 +161,38 @@ Graph<int> graphGen(){
 
 int graphMenu(int part){
 	clearScreen();
-	cout << "Escolha uma opcao:\n1. Gerador aleatorio de grafos\n2. Voltar atras\n\n";
-	int choice = getInput(1, 2);
+	cout << "Escolha uma opcao:\n1. Gerador aleatorio de grafos\n2. Carregar grafo de um ficheiro\n3. Voltar atras\n\n";
+	int choice = getInput(1, 3);
+	Graph<int> graph;
 
 	if(choice == 1){
-		Graph<int> graph = graphGen();
-		if(part == 1){
-			partOneTreatment(graph);
-		}
-		else if(part == 2){
-			partTwoTreatment(graph);
-		}
-		else{
-			cout << "Erro. Situacao inesperada. Voltando ao menu principal. (ENTER para continuar)\n";
-			cin.get();
-		}
-
-		cout << "ENTER para voltar ao menu principal\n";
-		cin.get();
-		return 0;
+		graph = graphGen();
 	}
 	else if(choice == 2){
+		cout << "Nome do ficheiro: ";
+		char *filename = (char *)malloc(256*sizeof(char));
+		cin.getline(filename, 256);
+		graph = loadGraph(filename);
+		free(filename);
+		if(graph.getNumVertex() == 0)
+			return 0;
+
+	}
+	else if(choice == 3){
 		return 0;
+	}
+
+	if(part == 1){
+		partOneTreatment(graph);
+		return 0;
+	}
+	else if(part == 2){
+		partTwoTreatment(graph);
+		return 0;
+	}
+	else{
+		cout << "Erro. Situacao inesperada. Voltando ao menu principal. (ENTER para continuar)\n";
+		cin.get();
 	}
 	return 1;
 }
@@ -204,4 +215,7 @@ int main(){
 
 		done = graphMenu(choice);
 	}
+	/*Graph<int> graph = loadGraph("test.txt");
+	graph.view();
+	cin.get();*/
 }
