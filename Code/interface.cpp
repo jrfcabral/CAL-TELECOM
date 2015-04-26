@@ -1,4 +1,6 @@
 #include <iostream>
+#include <fstream>
+#include <sstream>
 #include "Graph.h"
 
 using namespace std;
@@ -10,6 +12,48 @@ void clearScreen(){
 	system("clear");
 #endif
 }
+
+Graph<int> loadGraph(char *filename){
+	ifstream gurph(filename);
+	Graph<int> graph;
+	if(!gurph.is_open()){
+		cout << "Nao foi possivel abrir o ficheiro. \nVerifique que o nome providenciado corresponde a um ficheiro.\n";
+		return graph;
+	}
+	else{
+		int i = 0, numVertex;
+		string line;
+		while(getline(gurph, line)){
+			if(i++ == 0){
+				if(sscanf(line.c_str(), "%d", &numVertex) != 1){
+					cout << "O ficheiro nao esta formatado corretamente.\n";
+					return graph;
+				}
+				else{
+					for(int i = 0; i < numVertex; i++){
+						graph.addVertex(i);
+					}
+				}
+			}
+			else{
+				int origin, destiny;
+				double weight;
+				if(sscanf(line.c_str(), "%d;%d;%f", &origin, &destiny, &weight) != 3){
+					cout << "O ficheiro nao esta formatado corretamente.\nO grafo podera nao representar aquilo que e esperado.\nENTER para continuar";
+					cin.get();
+					return graph;
+				}
+				else{
+					graph.addEdge(origin, destiny, weight);
+					graph.addEdge(destiny, origin, weight);
+				}
+			}
+		}
+	}
+	return graph;
+}
+
+
 
 Graph<int> randomGraph(int numVertex, int edgeProb){
 
