@@ -177,7 +177,14 @@ int graphMenu(int part){
 		cin.getline(filename, 256);
 		graph = loadGraph(filename);
 		free(filename);
+
 		if(graph.getNumVertex() == 0)
+			return 0;
+
+		graph.view();
+		cout << "Deseja proceder com este grafo ou voltar ao menu principal?\n1. Proceder\n2. Menu principal\n";
+		choice = getInput(1, 2);
+		if(choice == 2)
 			return 0;
 
 	}
@@ -210,7 +217,7 @@ int main(){
 			"2. Segunda parte: Nos com distancia ilimitada e possibilidade de disconexao.\n3. Testes\n4 Sair\n";
 
 
-		int choice  = getInput(1, 3);
+		int choice  = getInput(1, 4);
 		if (choice == 3){
 			tests();
 			continue;
