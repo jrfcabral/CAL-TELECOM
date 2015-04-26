@@ -1,0 +1,14 @@
+\begin{thebibliography}{1}
+
+\bibitem{intro_algo}
+Thomas~H. Cormen, Charles~E. Leiserson, Ronald~L. Rivest, and Clifford Stein.
+\newblock {\em Introduction to Algorithms}.
+\newblock The MIT Press, third edition, 2009.
+
+\bibitem{ieor_mst}
+Dorit~S. Hochbaum.
+\newblock Network flows and graphs - lecture 25.
+\newblock Disponível em
+  \url{http://www.ieor.berkeley.edu/~ieor266/Lecture25.pdf} (2015/03/26).
+
+\end{thebibliography}

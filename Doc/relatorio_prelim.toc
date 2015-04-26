@@ -1,0 +1,25 @@
+\select@language {portuguese}
+\contentsline {section}{\numberline {1}Introdu\IeC {\c c}\IeC {\~a}o}{2}
+\contentsline {section}{\numberline {2}Problemas a abordar}{2}
+\contentsline {section}{\numberline {3}Casos de Utiliza\IeC {\c c}\IeC {\~a}o}{2}
+\contentsline {section}{\numberline {4}Formaliza\IeC {\c c}\IeC {\~a}o do problema}{3}
+\contentsline {subsection}{\numberline {4.1}1\IeC {\textordmasculine } problema/fase}{3}
+\contentsline {subsection}{\numberline {4.2}2\IeC {\textordmasculine } problema/fase}{4}
+\contentsline {section}{\numberline {5}Solu\IeC {\c c}\IeC {\~o}es implementadas}{5}
+\contentsline {subsection}{\numberline {5.1}1\IeC {\textordmasculine } Problema/Fase}{5}
+\contentsline {subsubsection}{\numberline {5.1.1}Algoritmo de Dijkstra}{5}
+\contentsline {subsubsection}{\numberline {5.1.2}Algoritmo de Prim}{6}
+\contentsline {subsection}{\numberline {5.2}2\IeC {\textordmasculine } Problema/Fase}{6}
+\contentsline {section}{\numberline {6}An\IeC {\'a}lise de complexidade}{7}
+\contentsline {subsection}{\numberline {6.1}Grafo}{7}
+\contentsline {subsubsection}{\numberline {6.1.1}Inser\IeC {\c c}\IeC {\~a}o de V\IeC {\'e}rtices}{7}
+\contentsline {subsubsection}{\numberline {6.1.2}Inser\IeC {\c c}\IeC {\~a}o de Arestas}{7}
+\contentsline {subsubsection}{\numberline {6.1.3}Remo\IeC {\c c}\IeC {\~a}o de V\IeC {\'e}rtices}{7}
+\contentsline {subsection}{\numberline {6.2}Algoritmo de Dijkstra}{7}
+\contentsline {subsection}{\numberline {6.3}Algoritmo de Prim}{8}
+\contentsline {section}{\numberline {7}An\IeC {\'a}lise Emp\IeC {\'\i }rica}{8}
+\contentsline {subsection}{\numberline {7.1}Algoritmo de Dijkstra}{9}
+\contentsline {subsection}{\numberline {7.2}Algoritmo de Prim}{10}
+\contentsline {section}{\numberline {8}Considera\IeC {\c c}\IeC {\~o}es sobre a realiza\IeC {\c c}\IeC {\~a}o do trabalho}{11}
+\contentsline {subsection}{\numberline {8.1}Principais dificuldades sentidas}{11}
+\contentsline {subsection}{\numberline {8.2}Contribui\IeC {\c c}\IeC {\~a}o dos elementos}{11}
