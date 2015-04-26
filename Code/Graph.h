@@ -95,8 +95,14 @@ public:
 	void view();
 	bool findVertex(const T &info) const;
 	double dijkstra(Vertex<T> *v, int range);
+	~Graph();
 };
 
+template <class T>
+Graph<T>::~Graph(){
+	for(unsigned int i = 0; i < vertexSet.size();i++)
+		delete vertexSet.at(i);
+}
 template <class T>
 void Graph<T>::view()
 {
