@@ -36,6 +36,7 @@ class Vertex{
 	bool hasParent = false;
 public:
 	int dist;
+	int color = 0;
 	Vertex<T>* parent;
 	int key;
 	Vertex(T in);
@@ -86,6 +87,7 @@ class Graph {
 	vector<Vertex<T> *> vertexSet;
 public:
 	bool addVertex(const T &in);
+	bool addVertex(const T &in, int color);
 	bool addEdge(const T &sourc, const T &dest, double w);
 	bool removeVertex(const T &in);
 	bool removeEdge(const T &sourc, const T &dest);
@@ -100,12 +102,23 @@ public:
 template <class T>
 void Graph<T>::view()
 {
+	vector<string> colors = vector<string>();
+	colors.push_back("YELLOW");
+	colors.push_back("BLACK");
+	colors.push_back("WHITE");
+	colors.push_back("BLUE");
+	colors.push_back("ORANGE");
+	colors.push_back("GREEN");
+	colors.push_back("MAGENTA");
+	colors.push_back("RED");
+	colors.push_back("PINK");
+	colors.push_back("DARK_GRAY");
 	GraphViewer* gv = new GraphViewer(1400,800, true);
 	int n = 0;
 	gv->createWindow(1400, 800);
 	for (unsigned int i = 0; i < vertexSet.size();i++){
 		gv->addNode(vertexSet.at(i)->info);
-		gv->setVertexColor(vertexSet.at(i)->info, "black");
+		gv->setVertexColor(vertexSet.at(i)->info, colors.at(vertexSet.at(i)->color%10));
 		for(unsigned int j = 0; j < vertexSet.at(i)->adj.size();j++){
 			gv->addEdge(n++, vertexSet.at(i)->info, vertexSet.at(i)->adj.at(j).dest->info, EdgeType::DIRECTED);
 			stringstream ss;
@@ -136,7 +149,7 @@ template <class T>
 Graph<T> Graph<T>::prim(){
 
 	Graph<T> result = Graph<T>();
-	vector<Graph<T> > subgraphs;
+	int currentColor = 0;
 	fibonacci_heap<Vertex<T>*, compare<vertex_comparator> > pq;
 	vertexSet.at(0)->key = 0;
 	vertexSet.at(0)->handle = pq.push(vertexSet.at(0));
@@ -151,14 +164,11 @@ Graph<T> Graph<T>::prim(){
 		v->visited = true;
 
 		if (v->hasParent){
-			result.addVertex(v->info);
+			result.addVertex(v->info, currentColor);
 			result.addEdge(v->parent->info, v->info,v->key);
 		}
 		else{
-			subgraphs.push_back(result);
-			result = Graph<T>();
-			result.addVertex(v->info);
-			cout << "novo subgrafo detetado" << endl;
+			result.addVertex(v->info, ++currentColor);
 		}
 
 
@@ -177,8 +187,7 @@ Graph<T> Graph<T>::prim(){
 			}
 		}
 	}
-	for(int i = 0; i < subgraphs.size(); i++)
-		subgraphs.at(i).view();
+
 	return result;
 
 }
@@ -195,14 +204,18 @@ vector<Vertex<T> * > Graph<T>::getVertexSet() const {
 
 template <class T>
 bool Graph<T>::addVertex(const T &in) {
-	typename vector<Vertex<T>*>::iterator it= vertexSet.begin();
-	typename vector<Vertex<T>*>::iterator ite= vertexSet.end();
-	for (; it!=ite; it++)
-		if ((*it)->info == in) return false;
+	return addVertex(in, 0);
+}
+
+template <class T>
+bool Graph<T>::addVertex(const T &in, int color) {
+
 	Vertex<T> *v1 = new Vertex<T>(in);
+	v1->color = color;
 	vertexSet.push_back(v1);
 	return true;
 }
+
 
 template <class T>
 bool Graph<T>::removeVertex(const T &in) {
