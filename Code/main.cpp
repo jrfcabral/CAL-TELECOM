@@ -4,7 +4,7 @@
 #include <fstream>
 #include "Graph.h"
 
-Graph<int> randomGraph(int numVertex, int edgeProb){
+Graph<int> randomGraphTests(int numVertex, int edgeProb){
 
 
 	Graph<int> graph = Graph<int>();
@@ -31,7 +31,7 @@ void dijkstraEdgeTests()
 	out.open("dijsktra_edges.csv", ios::trunc);
 	out << "Probability(%),Time(s)" << endl;
 	for (int i = 1; i <= 1000; i++){
-		Graph<int> graph = randomGraph(500,i);
+		Graph<int> graph = randomGraphTests(500,i);
 		out << i<< ","<<graph.dijkstra(graph.getVertexSet().at(1), 10000) << endl;
 		cout << i << endl;
 	}
@@ -41,7 +41,7 @@ void dijkstraNodeTests()
 	ofstream out;
 		out.open("dijsktra_nodes.csv", ios::trunc);
 		for (int i = 100; i <= 600; i++){
-			Graph<int> graph = randomGraph(i,50);
+			Graph<int> graph = randomGraphTests(i,50);
 			out << i<< ","<<graph.dijkstra(graph.getVertexSet().at(1), 10000) << endl;
 			cout << i << endl;
 		}
@@ -52,7 +52,7 @@ void primNodeTests()
 	clock_t begin , end;
 	out.open("prim_nodes.csv", ios::trunc);
 	for (int i = 100; i <= 600; i++){
-		Graph<int> graph = randomGraph(i,500);
+		Graph<int> graph = randomGraphTests(i,500);
 		begin = clock();
 		graph.prim();
 		end = clock();
@@ -67,7 +67,7 @@ void primEdgeTests()
 	clock_t begin , end;
 	out.open("prim_edges.csv", ios::trunc);
 	for (int i = 2; i <= 1000; i++){
-		Graph<int> graph = randomGraph(500,i);
+		Graph<int> graph = randomGraphTests(500,i);
 		begin = clock();
 		graph.prim();
 		end = clock();
@@ -75,7 +75,7 @@ void primEdgeTests()
 		cout << "prim" << i << endl;
 	}
 }
-int main(){
+int tests(){
 	srand(time(NULL));
 	//dijkstraEdgeTests();
 	//dijkstraNodeTests();
