@@ -191,7 +191,7 @@ Sendo \emph{V} o número de vértices a analisar e \emph{E} o número de arestas
 Por último e como característica particular do problema em causa, torna-se necessário percorrer novamente a lista de vértices no sentido de remover todos aqueles cuja distância à fonte seja excessiva. Dentro deste ciclo pode ou não ser chamada a função removeVertex, que, na nossa implementação do grafo, tem complexidade $O(V^2+ E)$, ficando este ciclo com complexidade $O(V^3+VE)$. Tem-se assim uma complexidade total $O(V+E+Vlog(V)+V(V^2+E)) = O(E+V(VlogV+V^2+E)$.
 
 \subsection{Algoritmo de Prim}
-Este algoritmo tem complexidade semelhante ao algoritmo de Dijkstra no ciclo principal. Contudo, de cada vez que um vértice é retirado da fila de prioridade, o mesmo tem que ser adicionado ao grafo resultante (ou um novo grafo a ser gerado, no caso de se tratar do primeiro elemento de um novo sub grafo) e uma aresta tem que ser adicionada de e para o seu predecessor. Esta operação pode ser feita em tempo linear $O(V)$. Ficamos assim com uma complexidade $O(E+V(V+ logV))=O(E+V^2)$.
+Este algoritmo tem complexidade semelhante ao algoritmo de Dijkstra no ciclo principal. Contudo, de cada vez que um vértice é retirado da fila de prioridade, o mesmo tem que ser adicionado ao grafo resultante e uma aresta tem que ser adicionada de e para o seu predecessor. Esta operação pode ser feita em tempo linear $O(V)$. Ficamos assim com uma complexidade $O(E+V(V+ logV))=O(E+V^2)$.
 
 \section{Análise Empírica}
 Para geração dos grafos a utilizar na análise empírica da performance dos algoritmos, foi utilizado o modelo de \emph{Erdős–Rényi}. Este modelo considera o grafo aleatório $G(n,p)$ como sendo um grafo de $n$ nós em que cada par de nós único tem uma probabilidade $p$ de ser ligado por uma aresta, também ela de peso aleatório. Os algoritmos até agora descritos foram corridos sobre grafos gerados segundo este modelo. Num primeiro momento, o número de nós foi fixado em 200 e fez-se variar a conectividade dos grafos. Posteriormente, fixou-se a probabilidade de cada aresta e fez-se variar o número de arestas. Para que que a aleatoriedade associada ao modelo usado tivesse impacto mínimo na análise, efetuou-se cada teste 10 vezes, calculando depois a média dos tempos necessários. Os gráficos abaixo apresentam um sumário desses resultados.
@@ -220,9 +220,9 @@ Além disso, foi-nos difícil concluir a parte do trabalho respeitante ao \emph{
 \subsection{Contribuição dos elementos}
 Todos os membros contribuíram para o trabalho, desenvolvendo funcionalidades do programa, bem como colaborando na formalização matemática do problema, na implementação de algoritmos, na descrição da solução e na análise empírica dos tempos de execução.
 \begin{description}
-\item[Francisco Veiga] Implementou o mecanismo de leitura de grafos a partir de um ficheiro de texto, trabalhou na conceção e compreensão dos algoritmos a usar e nos mecanismos de teste empírico da performance dos mesmos;
+\item[Francisco Veiga] Trabalhou no mecanismo de leitura de grafos a partir de um ficheiro de texto, na conceção e compreensão dos algoritmos a usar e nos mecanismos de teste empírico da performance dos mesmos;
 \item[João Cabral] Trabalhou na formalização matemática do problema, no algoritmo de Prim e na realização dos testes de performance empíricos e interface com o visualizador de grafos, bem como na elaboração do relatório;
-\item[João Mota]  Implementou o algoritmo de Dijkstra adaptado para remover os vértices que se encontrem fora de um raio especifico e a interface.
+\item[João Mota] Trabalhou no mecanismo de leitura de grafos a partir de um ficheiro de texto, na conceção e compreensão dos algoritmos no algoritmo de Dijkstra adaptado para remover os vértices que se encontrem fora de um raio especifico e a interface.
 
 
 \end{description}

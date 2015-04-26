@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2014/Arch Linux) (preloaded format=pdflatex 2015.4.23)  26 APR 2015 22:30
+This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2014/Arch Linux) (preloaded format=pdflatex 2015.4.23)  26 APR 2015 22:43
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -488,9 +488,9 @@ Package: verbatim 2014/10/28 v1.5q LaTeX2e package for verbatim enhancements
 \listing@line=\count140
 )
 \verbatim@out=\write4
-runsystem(touch w18-test-20154261350.tex)...disabled (restricted).
+runsystem(touch w18-test-20154261363.tex)...disabled (restricted).
 
-runsystem(rm -f w18-test-20154261350.tex)...disabled (restricted).
+runsystem(rm -f w18-test-20154261363.tex)...disabled (restricted).
 
 
 
@@ -746,7 +746,7 @@ r/sfrm1000.pfb></usr/share/texmf-dist/fonts/type1/public/cm-super/sfrm1200.pfb>
 mf-dist/fonts/type1/public/cm-super/sfrm2074.pfb></usr/share/texmf-dist/fonts/t
 ype1/public/cm-super/sfti1200.pfb></usr/share/texmf-dist/fonts/type1/public/cm-
 super/sftt1200.pfb>
-Output written on relatorio_prelim.pdf (13 pages, 329871 bytes).
+Output written on relatorio_prelim.pdf (13 pages, 329822 bytes).
 PDF statistics:
  171 PDF objects out of 1000 (max. 8388607)
  120 compressed objects within 2 object streams
