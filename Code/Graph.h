@@ -101,104 +101,6 @@ public:
 	void apagar();
 };
 
-template <class T>
-void Graph<T>::apagar(){
-	for (unsigned int i = 0; i < vertexSet.size();i++)
-		delete vertexSet.at(i);
-
-}
-template <class T>
-void Graph<T>::view()
-{
-	vector<string> colors = vector<string>();
-	colors.push_back("YELLOW");
-	colors.push_back("BLACK");
-	colors.push_back("WHITE");
-	colors.push_back("BLUE");
-	colors.push_back("ORANGE");
-	colors.push_back("GREEN");
-	colors.push_back("MAGENTA");
-	colors.push_back("RED");
-	colors.push_back("PINK");
-	colors.push_back("DARK_GRAY");
-	GraphViewer* gv = new GraphViewer(1400,800, true);
-	int n = 0;
-	gv->createWindow(1400, 800);
-	for (unsigned int i = 0; i < vertexSet.size();i++){
-		gv->addNode(vertexSet.at(i)->info);
-		gv->setVertexColor(vertexSet.at(i)->info, colors.at(vertexSet.at(i)->color%10));
-		for(unsigned int j = 0; j < vertexSet.at(i)->adj.size();j++){
-			gv->addEdge(n++, vertexSet.at(i)->info, vertexSet.at(i)->adj.at(j).dest->info, EdgeType::DIRECTED);
-			stringstream ss;
-			ss << vertexSet.at(i)->adj.at(j).weight;
-			gv->setEdgeLabel((n-1), ss.str());
-
-		}
-	}
-	gv->rearrange();
-
-}
-
-
-struct edge_comparator{
-	bool operator()(const Edge<int> e1, const Edge<int> e2) const{
-		return e1.weight > e2.weight;
-	}
-};
-
-struct vertex_comparator{
-	bool operator()(const Vertex<int>* v1, const Vertex<int>* v2) const{
-		//cout << "comparing" << v1->key << "with" << v2->key << endl << (v1->key < v2->key) << endl;
-		return v1->key > v2->key;
-	}
-};
-
-template <class T>
-Graph<T> Graph<T>::prim(){
-
-	Graph<T> result = Graph<T>();
-	int currentColor = 0;
-	fibonacci_heap<Vertex<T>*, compare<vertex_comparator> > pq;
-	vertexSet.at(0)->key = 0;
-	vertexSet.at(0)->handle = pq.push(vertexSet.at(0));
-	for (unsigned int i = 1; i < vertexSet.size(); i++){
-		vertexSet.at(i)->key = 9999999;
-		vertexSet.at(i)->handle = pq.push(vertexSet.at(i));
-		vertexSet.at(i)->visited = false;
-	}
-
-	while(pq.size()){
-		Vertex<T>* v = pq.top();
-		v->visited = true;
-
-		if (v->hasParent){
-			result.addVertex(v->info, currentColor);
-			result.addEdge(v->parent->info, v->info,v->key);
-		}
-		else{
-			result.addVertex(v->info, ++currentColor);
-		}
-
-
-		pq.pop();
-
-
-		for(unsigned int i = 0; i < v->adj.size(); i++){
-			Vertex<T>* d = v->adj.at(i).dest;
-
-			if (d->key > v->adj.at(i).weight  && !d->visited){
-				d->key = v->adj.at(i).weight;
-				d->parent = v;
-				d->hasParent = true;
-				pq.increase(d->handle);
-
-			}
-		}
-	}
-
-	return result;
-
-}
 
 
 template <class T>
@@ -344,5 +246,105 @@ double Graph<T>::dijkstra(Vertex<T> *v, int range){
 	end = clock();
 	return (double)end - begin;
 }
+
+template <class T>
+void Graph<T>::apagar(){
+	for (unsigned int i = 0; i < vertexSet.size();i++)
+		delete vertexSet.at(i);
+
+}
+template <class T>
+void Graph<T>::view()
+{
+	vector<string> colors = vector<string>();
+	colors.push_back("YELLOW");
+	colors.push_back("BLACK");
+	colors.push_back("WHITE");
+	colors.push_back("BLUE");
+	colors.push_back("ORANGE");
+	colors.push_back("GREEN");
+	colors.push_back("MAGENTA");
+	colors.push_back("RED");
+	colors.push_back("PINK");
+	colors.push_back("DARK_GRAY");
+	GraphViewer* gv = new GraphViewer(1400,800, true);
+	int n = 0;
+	gv->createWindow(1400, 800);
+	for (unsigned int i = 0; i < vertexSet.size();i++){
+		gv->addNode(vertexSet.at(i)->info);
+		gv->setVertexColor(vertexSet.at(i)->info, colors.at(vertexSet.at(i)->color%10));
+		for(unsigned int j = 0; j < vertexSet.at(i)->adj.size();j++){
+			gv->addEdge(n++, vertexSet.at(i)->info, vertexSet.at(i)->adj.at(j).dest->info, EdgeType::DIRECTED);
+			stringstream ss;
+			ss << vertexSet.at(i)->adj.at(j).weight;
+			gv->setEdgeLabel((n-1), ss.str());
+
+		}
+	}
+	gv->rearrange();
+
+}
+
+
+struct edge_comparator{
+	bool operator()(const Edge<int> e1, const Edge<int> e2) const{
+		return e1.weight > e2.weight;
+	}
+};
+
+struct vertex_comparator{
+	bool operator()(const Vertex<int>* v1, const Vertex<int>* v2) const{
+		//cout << "comparing" << v1->key << "with" << v2->key << endl << (v1->key < v2->key) << endl;
+		return v1->key > v2->key;
+	}
+};
+
+template <class T>
+Graph<T> Graph<T>::prim(){
+
+	Graph<T> result = Graph<T>();
+	int currentColor = 0;
+	fibonacci_heap<Vertex<T>*, compare<vertex_comparator> > pq;
+	vertexSet.at(0)->key = 0;
+	vertexSet.at(0)->handle = pq.push(vertexSet.at(0));
+	for (unsigned int i = 1; i < vertexSet.size(); i++){
+		vertexSet.at(i)->key = 9999999;
+		vertexSet.at(i)->handle = pq.push(vertexSet.at(i));
+		vertexSet.at(i)->visited = false;
+	}
+
+	while(pq.size()){
+		Vertex<T>* v = pq.top();
+		v->visited = true;
+
+		if (v->hasParent){
+			result.addVertex(v->info, currentColor);
+			result.addEdge(v->parent->info, v->info,v->key);
+		}
+		else{
+			result.addVertex(v->info, ++currentColor);
+		}
+
+
+		pq.pop();
+
+
+		for(unsigned int i = 0; i < v->adj.size(); i++){
+			Vertex<T>* d = v->adj.at(i).dest;
+
+			if (d->key > v->adj.at(i).weight  && !d->visited){
+				d->key = v->adj.at(i).weight;
+				d->parent = v;
+				d->hasParent = true;
+				pq.increase(d->handle);
+
+			}
+		}
+	}
+
+	return result;
+
+}
+
 
 #endif /* GRAPH_H_ */

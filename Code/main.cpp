@@ -94,9 +94,9 @@ void primEdgeTests()
 int tests(){
 	srand(time(NULL));
 	dijkstraEdgeTests();
-	//dijkstraNodeTests();
-	//primEdgeTests();
-	//primNodeTests();
+	dijkstraNodeTests();
+	primEdgeTests();
+	primNodeTests();
 
 
 
