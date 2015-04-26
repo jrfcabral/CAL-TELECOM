@@ -137,8 +137,8 @@ int partTwoTreatment(Graph<int> graph){
 Graph<int> graphGen(){
 	clearScreen();
 	int watdo = 0;
-	Graph<int> randGraph;
 
+	Graph<int> randGraph;
 	cout << "O gerador aleatorio necessita que sejam providenciados os seguintes parametros:\n" <<
 			"Numero de vertices\nProbabilidade de haver aresta (inteiro entre 0 e 100)\n";
 	while(watdo != 1){
@@ -152,9 +152,11 @@ Graph<int> graphGen(){
 
 		cout << "Quer proceder com este grafo ou deseja gerar de novo?\n1. Proceder\n2. Gerar de novo\n";
 		watdo = getInput(1, 2);
-	}
 
+
+		}
 	return randGraph;
+
 }
 
 
@@ -167,6 +169,7 @@ int graphMenu(int part){
 
 	if(choice == 1){
 		graph = graphGen();
+		cout << "graph_menu:Recebi grafo com " << graph.getNumVertex() << endl;
 	}
 	else if(choice == 2){
 		cout << "Nome do ficheiro: ";

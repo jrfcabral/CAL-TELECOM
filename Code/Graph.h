@@ -86,6 +86,7 @@ template <class T>
 class Graph {
 	vector<Vertex<T> *> vertexSet;
 public:
+	Graph(){};
 	bool addVertex(const T &in);
 	bool addVertex(const T &in, int color);
 	bool addEdge(const T &sourc, const T &dest, double w);
@@ -97,13 +98,14 @@ public:
 	void view();
 	bool findVertex(const T &info) const;
 	double dijkstra(Vertex<T> *v, int range);
-	~Graph();
+	void apagar();
 };
 
 template <class T>
-Graph<T>::~Graph(){
+void Graph<T>::apagar(){
 	for (unsigned int i = 0; i < vertexSet.size();i++)
 		delete vertexSet.at(i);
+
 }
 template <class T>
 void Graph<T>::view()

@@ -32,11 +32,12 @@ void dijkstraEdgeTests()
 	out << "Probability(%),Time(s)" << endl;
 	for (int i = 1; i <= 100; i++){
 		int time = 0;
-		for(int k = 0; k < 50;k++){
+		for(int k = 0; k < 10;k++){
 			Graph<int> graph = randomGraphTests(200,i);
 			time += graph.dijkstra(graph.getVertexSet().at(1), 10000);
+			graph.apagar();
 		}
-		out << i<< ","<< time/50 << endl;
+		out << i<< ","<< time/10 << endl;
 		cout << i << endl;
 	}
 }
@@ -46,11 +47,12 @@ void dijkstraNodeTests()
 		out.open("dijsktra_nodes.csv", ios::trunc);
 		for (int i = 100; i <= 600; i++){
 			int time = 0;
-			for(int k = 0; k < 50;k++){
+			for(int k = 0; k < 10;k++){
 				Graph<int> graph = randomGraphTests(i,300);
 				time += graph.dijkstra(graph.getVertexSet().at(1), 10000);
+				graph.apagar();
 			}
-			out << i<< ","<< time/50 << endl;
+			out << i<< ","<< time/10 << endl;
 			cout << i << endl;
 		}
 }
@@ -61,12 +63,13 @@ void primNodeTests()
 	out.open("prim_nodes.csv", ios::trunc);
 	for (int i = 100; i <= 600; i++){
 		begin = clock();
-		for (int k = 0; k < 50; k++){
+		for (int k = 0; k < 10; k++){
 			Graph<int> graph = randomGraphTests(i,300);
 			graph.prim();
+			graph.apagar();
 		}
 		end = clock();
-		out << i<< ","<<(double)end-begin<< endl;
+		out << i<< ","<<(end-begin)/10<< endl;
 		cout << i << endl;
 	}
 }
@@ -78,17 +81,21 @@ void primEdgeTests()
 	out.open("prim_edges.csv", ios::trunc);
 	for (int i = 2; i <= 100; i++){
 		begin = clock();
-		for (int k=0;k < 50; k++){
+		for (int k=0;k < 10; k++){
 			Graph<int> graph = randomGraphTests(200,i);
 			graph.prim();
+			graph.apagar();
 		}
 		end = clock();
-		out << i<< ","<<(double)end-begin<< endl;
+		out << i<< ","<<(end-begin)/10<< endl;
 		cout << "prim" << i << endl;
 	}
 }
 int tests(){
 	srand(time(NULL));
+	Graph<int> grafo = randomGraphTests(5,10);
+	grafo.view();
+	cin.get();
 	dijkstraEdgeTests();
 	dijkstraNodeTests();
 	primEdgeTests();
