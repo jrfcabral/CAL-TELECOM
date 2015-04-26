@@ -97,8 +97,14 @@ public:
 	void view();
 	bool findVertex(const T &info) const;
 	double dijkstra(Vertex<T> *v, int range);
+	~Graph();
 };
 
+template <class T>
+Graph<T>::~Graph(){
+	for (unsigned int i = 0; i < vertexSet.size();i++)
+		delete vertexSet.at(i);
+}
 template <class T>
 void Graph<T>::view()
 {
@@ -322,11 +328,11 @@ double Graph<T>::dijkstra(Vertex<T> *v, int range){
 	}
 
 
-	cout << "Node ---> keyance to \"main\" node\n";
+	//cout << "Node ---> keyance to \"main\" node\n";
 	for(unsigned int i = 0; i < this->vertexSet.size(); i++){
-		cout << i+1 << "---> " << this->vertexSet.at(i)->dist << endl;
+		//cout << i+1 << "---> " << this->vertexSet.at(i)->dist << endl;
 		if(this->vertexSet.at(i)->key > range){
-			cout << "Removing node " << i+1 << endl;
+		//	cout << "Removing node " << i+1 << endl;
 			this->removeVertex(this->vertexSet.at(i)->info);
 			i--;
 		}
@@ -334,7 +340,7 @@ double Graph<T>::dijkstra(Vertex<T> *v, int range){
 	}
 
 	end = clock();
-	return (double)begin - end;
+	return (double)end - begin;
 }
 
 #endif /* GRAPH_H_ */

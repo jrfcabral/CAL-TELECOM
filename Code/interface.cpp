@@ -4,7 +4,7 @@
 #include "Graph.h"
 
 using namespace std;
-
+void tests();
 void clearScreen(){
 #ifndef unix
 	system("cls");
@@ -88,7 +88,7 @@ int getInput(int min, int max){
 			}
 		}
 		catch(int ex){
-			cout << "Input invalido. Introduza um numero correspondente a uma das opçoes listada acima.\n";
+			cout << "Input invalido. Introduza um numero correspondente a uma das opï¿½oes listada acima.\n";
 			cin.clear();
 			cin.ignore(10000, '\n');
 			continue;
@@ -178,7 +178,7 @@ int graphMenu(int part){
 			return 0;
 
 	}
-	else if(choice == 3){
+	else if(choice == 4){
 		return 0;
 	}
 
@@ -204,12 +204,16 @@ int main(){
 	while(!done){
 		clearScreen();
 		cout << "Escolha o contexto:\n1. Primeira parte: Nos limitados a um raio e grafo garantidamente conexo.\n" <<
-			"2. Segunda parte: Nos com distancia ilimitada e possibilidade de disconexao.\n3. Sair\n";
+			"2. Segunda parte: Nos com distancia ilimitada e possibilidade de disconexao.\n3. Testes\n4 Sair\n";
 
 
 		int choice  = getInput(1, 3);
+		if (choice == 3){
+			tests();
+			continue;
+		}
 
-		if(choice == 3){
+		if(choice == 4){
 			return 0;
 		}
 
