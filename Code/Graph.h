@@ -35,6 +35,8 @@ class Vertex{
 	typename boost::heap::fibonacci_heap<Vertex<T>*, compare<vertex_comparator> >::handle_type handle;
 	bool hasParent = false;
 public:
+	double lat;
+	double lon;
 	int dist;
 	int color = 0;
 	Vertex<T>* parent;
@@ -99,6 +101,10 @@ public:
 	bool findVertex(const T &info) const;
 	double dijkstra(Vertex<T> *v, int range);
 	void apagar();
+	bool addVertexOSM(const T &in, double lat, double lon);
+	void viewOSM();
+	double minlat, maxlat;
+	double minlon, maxlon;
 };
 
 template <class T>
@@ -126,6 +132,41 @@ void Graph<T>::view()
 	gv->createWindow(1400, 800);
 	for (unsigned int i = 0; i < vertexSet.size();i++){
 		gv->addNode(vertexSet.at(i)->info);
+		gv->setVertexColor(vertexSet.at(i)->info, colors.at(vertexSet.at(i)->color%10));
+		for(unsigned int j = 0; j < vertexSet.at(i)->adj.size();j++){
+			gv->addEdge(n++, vertexSet.at(i)->info, vertexSet.at(i)->adj.at(j).dest->info, EdgeType::DIRECTED);
+			stringstream ss;
+			ss << vertexSet.at(i)->adj.at(j).weight;
+			gv->setEdgeLabel((n-1), ss.str());
+
+		}
+	}
+	gv->rearrange();
+
+}
+
+template <class T>
+void Graph<T>::viewOSM()
+{
+	vector<string> colors = vector<string>();
+	colors.push_back("YELLOW");
+	colors.push_back("BLACK");
+	colors.push_back("WHITE");
+	colors.push_back("BLUE");
+	colors.push_back("ORANGE");
+	colors.push_back("GREEN");
+	colors.push_back("MAGENTA");
+	colors.push_back("RED");
+	colors.push_back("PINK");
+	colors.push_back("DARK_GRAY");
+	GraphViewer* gv = new GraphViewer(1400,800, true);
+	int n = 0;
+	gv->createWindow(1400, 800);
+	for (unsigned int i = 0; i < vertexSet.size();i++){
+		gv->addNode(vertexSet.at(i)->info, );
+
+
+
 		gv->setVertexColor(vertexSet.at(i)->info, colors.at(vertexSet.at(i)->color%10));
 		for(unsigned int j = 0; j < vertexSet.at(i)->adj.size();j++){
 			gv->addEdge(n++, vertexSet.at(i)->info, vertexSet.at(i)->adj.at(j).dest->info, EdgeType::DIRECTED);
@@ -220,6 +261,17 @@ bool Graph<T>::addVertex(const T &in, int color) {
 
 	Vertex<T> *v1 = new Vertex<T>(in);
 	v1->color = color;
+	vertexSet.push_back(v1);
+	return true;
+}
+
+template <class T>
+bool Graph<T>::addVertexOSM(const T &in, double lat, double lon) {
+
+	Vertex<T> *v1 = new Vertex<T>(in);
+	v1->color = 0;
+	v1->lat = lat;
+	v1->lon = lon;
 	vertexSet.push_back(v1);
 	return true;
 }

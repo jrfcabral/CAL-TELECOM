@@ -5,12 +5,64 @@
 
 using namespace std;
 void tests();
+
 void clearScreen(){
 #ifndef unix
 	system("cls");
 #else
 	system("clear");
 #endif
+}
+
+Graph<int> loadFromOSM(){
+	Graph<int> osmGraph;
+	char *nodeFile = (char *)malloc(256*sizeof(char)), *edgeFile = (char *)malloc(256*sizeof(char)), *osmFile = (char *)malloc(256*sizeof(char));
+	cout << "Nome do ficheiro osm: ";
+	cin.getline(osmFile, 256);
+	cout << "\nNome do ficheiro com os vertices: ";
+	cin.getline(nodeFile, 256);
+	cout << "\nNome do ficheiro com as arestas: ";
+	cin.getline(edgeFile, 256);
+
+	ifstream osm(osmFile), node(nodeFile), edge(edgeFile);
+	if(!osm.is_open() || !node.is_open() || !edge.is_open()){
+		cout << "Pelo menos um dos ficheiros nao pode ser aberto.\nVerifique que o nome providenciado corresponde a um ficheiro.\n";
+		return osmGraph;
+	}
+	else{
+		string line;
+		while(getline(node, line)){
+			int id;
+			double lat, lon;
+			if(sscanf(line.c_str(), "%d;%lf;%lf", &id, &lat, &lon) != 3){
+				cout << "O ficheiro nao esta formatado corretamente.\n";
+				return osmGraph;
+			}
+			osmGraph.addVertexOSM(id, lat, lon);
+		}
+		node.close();
+
+		while(getline(edge, line)){
+			double weight;
+			int origin, destiny;
+			if(sscanf(line.c_str(), "%lf;%d;%d", &weight, &origin, &destiny) != 3){
+				cout << "O ficheiro nao esta formatado corretamente.\nO grafo podera nao representar aquilo que e esperado.\nENTER para continuar";
+				cin.get();
+				return osmGraph;
+			}
+			osmGraph.addEdge(origin, destiny, weight);
+		}
+		edge.close();
+		int i = 0;
+		while(i++ != 3){
+			getline(osm, line);
+			cout << line << endl;
+		}
+		osm.close();
+	}
+	return osmGraph;
+
+
 }
 
 Graph<int> loadGraph(char *filename){
@@ -118,7 +170,8 @@ int partOneTreatment(Graph<int> graph){
 	cout << "Computando a arvore de expansao minima...\n";
 	Graph<int> primmed = graph.prim();
 	primmed.view();
-
+	cout << "ENTER para voltar ao menu principal\n";
+	cin.get();
 	return 0;
 
 }
@@ -169,7 +222,7 @@ int graphMenu(int part){
 
 	if(choice == 1){
 		graph = graphGen();
-		cout << "graph_menu:Recebi grafo com " << graph.getNumVertex() << endl;
+		//cout << "graph_menu:Recebi grafo com " << graph.getNumVertex() << endl;
 	}
 	else if(choice == 2){
 		cout << "Nome do ficheiro: ";
@@ -203,14 +256,14 @@ int graphMenu(int part){
 
 int main(){
 
-	int done = 0;
+	/*int done = 0;
 	while(!done){
 		clearScreen();
 		cout << "Escolha o contexto:\n1. Primeira parte: Nos limitados a um raio e grafo garantidamente conexo.\n" <<
 			"2. Segunda parte: Nos com distancia ilimitada e possibilidade de disconexao.\n3. Testes\n4 Sair\n";
 
 
-		int choice  = getInput(1, 3);
+		int choice  = getInput(1, 4);
 		if (choice == 3){
 			tests();
 			continue;
@@ -221,8 +274,8 @@ int main(){
 		}
 
 		done = graphMenu(choice);
-	}
-	/*Graph<int> graph = loadGraph("test.txt");
+	}*/
+	Graph<int> graph = loadFromOSM();
 	graph.view();
-	cin.get();*/
+	cin.get();
 }
