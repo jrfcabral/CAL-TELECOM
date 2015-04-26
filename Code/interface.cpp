@@ -169,7 +169,6 @@ int graphMenu(int part){
 
 	if(choice == 1){
 		graph = graphGen();
-		cout << "graph_menu:Recebi grafo com " << graph.getNumVertex() << endl;
 	}
 	else if(choice == 2){
 		cout << "Nome do ficheiro: ";
