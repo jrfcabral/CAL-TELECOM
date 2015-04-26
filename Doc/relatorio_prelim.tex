@@ -5,11 +5,13 @@
 \usepackage{mathtools}
 \usepackage{amssymb}
 \usepackage{amsmath}
+\usepackage{algorithm}% http://ctan.org/pkg/algorithms
+\usepackage{algpseudocode}% http://ctan.org/pkg/algorithmicx
 \usepackage{url}
 \let\biconditional\leftrightarrow
 \begin{document}
 
-\title{Relatório preliminar de Conceção e Análise de Algoritmos}
+\title{Relatório Conceção e Análise de Algoritmos}
 \date{março 2015}
 \author{Francisco Veiga, 201201604@fe.up.pt
  \and João Cabral, up201304395@fe.up.pt
@@ -92,30 +94,96 @@ $$\sum_{(u,v)\in (S,S)} x(u,v) \leq |S| - 1 \quad \forall S \subseteq V_T$$
 \linebreak
 \linebreak
 \linebreak
-\section{Ideias de solução}
-\subsection{1º problema/fase}
-Aplicar o \emph{algoritmo de Dijkstra}, um algoritmo ganancioso, para calcular o caminho mais curto para todos os pontos do grafo a partir da central de forma a aferir os vértices do grafo que se encontram dentro do raio de cobertura pretendido. Excluir do grafo todos os pontos cuja distância à central seja superior ao raio desejado.
+\section{Soluções implementadas}
+\subsection{1º Problema/Fase}
+Para a resolução deste problema recorreu-se a dois algoritmos conhecidos que operam sobre grafos: o algoritmo de \emph{Dijkstra} para cálculo das distâncias de todos os nós a uma determinada fonte e o algoritmo de \emph{Prim} para cálculo da árvore de expansão mínima do grafo. Para a implementação da fila de prioridades recorreu-se ao \emph{Heap de Fibonacci} da biblioteca \emph{Boost}. 
+\subsubsection{Algoritmo de Dijkstra}
 
-De seguida usar o \emph{algoritmo de Prim}, também ele um algoritmo ganancioso, para calcular uma árvore de expansão mínima do grafo resultante da operação anterior, resultando numa distância ótima de cabo a utilizar.
+\begin{algorithmic}[1]
+\Procedure{Dijkstra}{fonte, limite, grafo}
+\State $vertices \gets grafo.vertices$
+\For{Q $\in$ vértices}
+\State $Q.dist \gets \infty$
+\State $Q.path \gets NULL$
+\EndFor
+\State $fonte \gets 0$
+\State $FH.push(fonte)$
+\While{$FH \neq \varnothing$}
+\State $v \gets FH.pop()$
+\For{$a \in v.adjacencias$}
+\If{$v.dist + w < a.dist$}
+	\State $a.dist \gets v.dist + w$
+	\State $a.path \gets v$
+	\If{$a \notin FH$}
+		\State $FH.push(a)$
+	\Else
+		\State $FH.decreaseKey()$
+	\EndIf
+\EndIf
+\EndFor
+\EndWhile
+\EndProcedure
+\Procedure{Podar grafo}{grafo, limite}
+\For{$v \in grafo.vertices$}
+\If{$v.dist > limite$}
+\State $grafo.removeVertice(v)$
+\EndIf
+\EndFor
+\EndProcedure
+\end{algorithmic}
 
-\subsection{2º problema/fase}
-Para a segunda fase prevê-se um aumento do raio de abrangência para a central. Isto pode levar à existência de sub-grafos desconexos. É da nossa interpretação que a cada grafo desconexo se deve acrescentar uma central. O \emph{algoritmo de Prim} só permite chegar à árvore de expansão mínima de um dos sub-grafos desconexos de $G$ por cada vez que é corrido. Embora existam algoritmos que permitem calcular árvores de expansão mínima em grafos desconexos, gerando uma árvore em cada sub-grafo, o cálculo do conjunto $D$ essencial para obter $S$ implica necessariamente uma determinação destes subgrafos.
+O algoritmo de Dijkstra foi artilhado com a possibilidade de remover os nós cuja distância à fonte exceda um determinado limite.
+
+\subsubsection{Algoritmo de Prim}
+\begin{algorithmic}[1]
+\Procedure{Prim}{grafo}
+\State $novoGrafo \gets \varnothing$
+\State $vértices \gets grafo.vértices$
+\For{Q $\in$ vértices}
+\State $Q.key \gets \infty$
+\State $Q.path \gets NULL$
+\State $Q.visited \gets false$
+\EndFor
+\State $FH.enqueue(vértices)$
+\While{$FH \neq \varnothing$}
+\State $v \gets FH.pop()$
+\State $novoGrafo \gets path(v, v.path)$
+\State $v.visited \gets true$
+\For{$a \in v.adj$}
+\If{$a.key > weight(v,a)$ AND $d.visited = false $}
+\State $a.key \gets weight(v,a)$;
+\State $a.path \gets v$
+\State $a.decreaseKey()$
+\EndIf
+\EndFor
+\EndWhile
+\EndProcedure
+
+\end{algorithmic}
 
 
+\subsection{2º Problema/Fase}
+Para resolver este problema torna-se necessário identificar conjuntos de sub grafos desconexos. O algoritmo de Prim já identifica a árvore de expansão mínima de cada sub grafo desconexo, mas não efetua a identificação dos sub grafos desconexos em si mesmos. Tornou-se portanto necessário adaptar levemente o dito algoritmo. Em concreto, de cada vez que um vértice é removido da fila e não possui um antecessor o grafo construido até agora é guardado numa fila e começa a ser construído um novo grafo. Fica garantido o facto de não serem abandonados vértices do grafo anterior porque os vértices do próximo grafo são inicializados com uma chave infinita, só sendo retirados da fila quando todo o restante grafo já foi percorrido.
+
+\section{Análise de complexidade}
+\subsection[Grafo]{Grafo\footnote{Analisam-se exclusivamente as operações do grafo utilizadas no programa desenvolvido.}}
+
+\subsubsection{Inserção de Vértices}
+No contexto da nossa aplicação optamos por utilizar uma implementação \emph{naïve} que se limita a acrescentar o vértice a um vetor de vértices, sem verificar repetição de elementos. Tem uma complexidade $O(1)$.
+
+\subsubsection{Inserção de Arestas}
+É necessário percorrer o conjunto de vértices para verificar a existência do destino e da fonte da aresta. Tem portanto uma complexidade $O(V)$
+
+\subsubsection{Remoção de Vértices}
+É necessário percorrer o conjunto de vértices para encontrar o vértice pretendido, e depois novamente para encontrar e apagar todas as arestas que apontam para este vértice. Tem por isso uma complexidade $O(V^2+E)$.
 
 
-\section{Métricas de avaliação}
-Para obter uma métrica da eficiência espacial e temporal dos algoritmos pretende-se aplicar chamadas às funções do sistema operativo que permitem obter informações acerca do tempo de execução e da ocupação de memória de um determinado código. Se no caso da eficiência temporal esta informação é de aplicação mais direta, podendo ser obtida imediatamente antes e depois da execução do algoritmo cuja eficiência se pretende medir, no caso da eficiência espacial torna-se essencial escolher pontos relevantes para efetuar a medição, dado que ao longo da execução de um programa a sua ocupação em memória pode variar drasticamente.
- 
-É ainda importante ter em conta para a medição do tempo de execução de um processo que as chamadas ao sistema que permitem obter a sua ocupação em memória têm um tempo de execução não nulo, pelo que convém efetuar as duas medições separadamente.
-\subsection{Variação das entradas}
-\subsubsection{1º problema/fase}
-Torna-se importante variar o número de nós do grafo bem como o seu número de arestas separadamente, para aferir do impacto de cada uma das variáveis no tempo de execução de cada um dos algoritmos aplicados. Torna-se também importante variar o número de arestas a serem excluídas pela aplicação do algoritmo de Dijkstra antes do cálculo da árvore de expansão mínima. 
-\subsubsection{2º problema/fase}
-Aplica-se a mesma necessidade de variar o número de grafos e o número de nós que se verifica na 1ª fase. Torna-se também importante variar a conectividade dos grafos, testando os algoritmos com um número variável de subgrafos desconexos, para avaliar o impacto que isso tem na performance de cada um.
+\subsection{Algoritmo de Dijkstra}
+Sendo \emph{V} o número de vértices a analisar e \emph{E} o número de arestas, o algoritmo percorre primeiramente toda a lista de vértices para inicializar valores. Esta operação tem complexidade \emph{V}.Acrescenta-se, com complexidade $O(1)$, a fonte à fila de prioridade. De seguida percorre-se a fila de prioridade, recorrendo a função de extração do menor elemento da fila. Num heap de fibonacci esta operação corre em tempo $log(V)$. Obtém-se assim para este ciclo uma complexidade $Vlog(V)$. Dentro deste ciclo todas as arestas do grafo acabam por ser analisadas, sendo, quando encontrada uma aresta que constitua um caminho mais favorável, chamada a função DecreaseKey do Fibonacci heap, que corre em tempo constante. Obtém-se assim uma complexidade linear $E$.
 
-
-
+Por último, e como característica particular do problema em causa torna-se necessário percorrer novamente a lista de vértices no sentido de remover todos aqueles cuja distância à fonte seja excessiva. Dentro deste ciclo pode ou não ser chamada a função removeVertex, que na nossa implementação do grafo tem complexidade $V^2+ E$, ficando este ciclo com complexidade $V^3+VE$. Tem-se assim uma complexidade total $O(V+E+Vlog(V)+V(V^2+E)) = O(E+V(VlogV+V^2+E)$.
+\subsection{Algoritmo de Prim}
+Tem complexidade semelhante ao algoritmo de Dijkstra no ciclo principal. Contudo, de cada vez que um vértice é retirado da fila de prioridade o mesmo tem que ser adicionado ao grafo resultante (ou um novo grafo ser gerado, no caso de se tratar do primeiro elemento de um novo sub grafo), e uma aresta tem que ser adicionada de e para o seu predecessor. Como é possível ter referências diretas para a nova aresta e o seu predecessor esta operação pode ser feita em tempo constante $O(1)$. Ficamos assim com uma complexidade $O(E+VlogV)$.
 
 \newpage
 \bibliographystyle{plain}
