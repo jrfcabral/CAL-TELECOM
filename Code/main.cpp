@@ -93,13 +93,10 @@ void primEdgeTests()
 }
 int tests(){
 	srand(time(NULL));
-	Graph<int> grafo = randomGraphTests(5,10);
-	grafo.view();
-	cin.get();
 	dijkstraEdgeTests();
-	dijkstraNodeTests();
-	primEdgeTests();
-	primNodeTests();
+	//dijkstraNodeTests();
+	//primEdgeTests();
+	//primNodeTests();
 
 
 

@@ -1,0 +1,79 @@
+%% GNUPLOT: LaTeX using TEXDRAW macros
+\begin{texdraw}
+\normalsize
+\ifx\pathDEFINED\relax\else\let\pathDEFINED\relax
+ \def\QtGfr{\ifx (\TGre \let\YhetT\cpath\else\let\YhetT\relax\fi\YhetT}
+ \def\path (#1 #2){\move (#1 #2)\futurelet\TGre\QtGfr}
+ \def\cpath (#1 #2){\lvec (#1 #2)\futurelet\TGre\QtGfr}
+\fi
+\drawdim pt
+\setunitscale 0.24
+\linewd 3
+\textref h:L v:C
+\linewd 4
+\path (188 144)(208 144)
+\path (1433 144)(1413 144)
+\move (166 144)\textref h:R v:C \htext{ 550}
+\path (188 246)(208 246)
+\path (1433 246)(1413 246)
+\move (166 246)\htext{ 600}
+\path (188 347)(208 347)
+\path (1433 347)(1413 347)
+\move (166 347)\htext{ 650}
+\path (188 449)(208 449)
+\path (1433 449)(1413 449)
+\move (166 449)\htext{ 700}
+\path (188 550)(208 550)
+\path (1433 550)(1413 550)
+\move (166 550)\htext{ 750}
+\path (188 652)(208 652)
+\path (1433 652)(1413 652)
+\move (166 652)\htext{ 800}
+\path (188 753)(208 753)
+\path (1433 753)(1413 753)
+\move (166 753)\htext{ 850}
+\path (188 855)(208 855)
+\path (1433 855)(1413 855)
+\move (166 855)\htext{ 900}
+\path (188 144)(188 164)
+\path (188 855)(188 835)
+\move (188 99)\textref h:C v:C \htext{ 0}
+\path (313 144)(313 164)
+\path (313 855)(313 835)
+\move (313 99)\htext{ 2}
+\path (437 144)(437 164)
+\path (437 855)(437 835)
+\move (437 99)\htext{ 4}
+\path (562 144)(562 164)
+\path (562 855)(562 835)
+\move (562 99)\htext{ 6}
+\path (686 144)(686 164)
+\path (686 855)(686 835)
+\move (686 99)\htext{ 8}
+\path (811 144)(811 164)
+\path (811 855)(811 835)
+\move (811 99)\htext{ 10}
+\path (935 144)(935 164)
+\path (935 855)(935 835)
+\move (935 99)\htext{ 12}
+\path (1060 144)(1060 164)
+\path (1060 855)(1060 835)
+\move (1060 99)\htext{ 14}
+\path (1184 144)(1184 164)
+\path (1184 855)(1184 835)
+\move (1184 99)\htext{ 16}
+\path (1309 144)(1309 164)
+\path (1309 855)(1309 835)
+\move (1309 99)\htext{ 18}
+\path (1433 144)(1433 164)
+\path (1433 855)(1433 835)
+\move (1433 99)\htext{ 20}
+\path (188 855)(188 144)(1433 144)(1433 855)(188 855)
+\move (33 499)\vtext{Tempo (ticks de relógio)}
+\move (810 32)\htext{p(%)}
+\path (250 796)(250 796)(313 203)(375 213)(437 223)(499 262)
+\cpath (562 286)(624 329)(686 270)(748 302)(811 315)
+\cpath (873 315)(935 335)(997 453)(1060 439)(1122 380)
+\cpath (1184 380)(1246 465)(1309 475)(1371 453)
+\path (188 855)(188 144)(1433 144)(1433 855)(188 855)
+\end{texdraw}

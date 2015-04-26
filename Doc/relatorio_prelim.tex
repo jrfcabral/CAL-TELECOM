@@ -8,6 +8,8 @@
 \usepackage{algorithm}% http://ctan.org/pkg/algorithms
 \usepackage{algpseudocode}% http://ctan.org/pkg/algorithmicx
 \usepackage{url}
+\usepackage{texdraw}
+\usepackage{gnuplottex}
 \let\biconditional\leftrightarrow
 \begin{document}
 
@@ -187,7 +189,11 @@ Tem complexidade semelhante ao algoritmo de Dijkstra no ciclo principal. Contudo
 
 \section{Análise Empírica}
 Para geração dos grafos a utilizar na análise empírica da performance dos algoritmos foi utilizado o modelo de \emph{Erdős–Rényi}. Este modelo considera o grafo aleatório $G(n,p)$ como sendo um grafo de $n$ nós em que cada par de nós único tem uma probabilidade $p$ de ser ligado por uma aresta, também ela de peso aleatório. Os algoritmos até agora descritos foram corridos sobre grafos gerados segundo este modelo. Num primeiro momento o número de nós foi fixado em 200 e fez-se variar a conectividade dos grafos. Posteriormente fixou-se a probabilidade de cada aresta e fez-se variar o número de arestas. Para que que a aleatoriedade associada ao modelo usado tivesse impacto mínimo na análise efetuou-se cada teste 50 vezes, calculando depois a média dos tempos necessários. Os gráficos abaixo apresentam um sumário desses resultados.
-\newpage
+\subsection{Algoritmo de Dijkstra}
+\begin{figure}[!h]
+\input{dijkstra_edges.tex}
+\end{figure}
+
 \bibliographystyle{plain}
 \bibliography{cal}
 
