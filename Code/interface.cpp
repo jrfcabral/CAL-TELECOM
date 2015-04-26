@@ -59,22 +59,34 @@ int getInput(int min, int max){
 }
 
 int partOneTreatment(Graph<int> graph){
+	clearScreen();
 	cout << "No contexto escolhido (primeira parte) e necessario providenciar os seguintes parametros:\n" <<
 			"Vertice que representa a central\nRaio de abrangencia da central\n";
 
 	cout << "Introduza o numero do vertice que representa a central\n";
-	int vert = getInput(1, graph.getVertexSet().size());
-	vert--;
+	int vert = getInput(0, graph.getVertexSet().size()-1);
 	cout << "Introduza o raio de abrangencia pretendido\n";
 	int range = getInput(1, 10000);
 
 	cout << "Limitando o grafo ao raio de abrangencia providenciado...\n";
 	graph.dijkstra(graph.getVertexSet().at(vert), range);
 	cout << "Computando a arvore de expansao minima...\n";
-	graph.prim().view();
-	cin.get();
+	Graph<int> primmed = graph.prim();
+	primmed.view();
+
 	return 0;
 
+}
+
+int partTwoTreatment(Graph<int> graph){
+	clearScreen();
+	cout << "No contexto escolhido (segunda parte) nao e necessario providenciar quaisquer parametros.\n";
+
+	cout << "Detetando subgrafos e computando arvore(s) de expensao minima...\n";
+	Graph<int> primmed = graph.prim();
+	primmed.view();
+
+	return 0;
 }
 
 Graph<int> graphGen(){
@@ -113,13 +125,16 @@ int graphMenu(int part){
 			partOneTreatment(graph);
 		}
 		else if(part == 2){
-			//partTwoTreatment(graph);
+			partTwoTreatment(graph);
 		}
 		else{
 			cout << "Erro. Situacao inesperada. Voltando ao menu principal. (ENTER para continuar)\n";
 			cin.get();
 		}
 
+		cout << "ENTER para voltar ao menu principal\n";
+		cin.get();
+		return 0;
 	}
 	else if(choice == 2){
 		return 0;
