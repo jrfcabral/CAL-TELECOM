@@ -103,7 +103,7 @@ $$\sum_{(u,v)\in (S,S)} x(u,v) \leq |S| - 1 \quad \forall S \subseteq V_T$$
 \linebreak
 \section{Soluções implementadas}
 \subsection{1º Problema/Fase}
-Para a resolução deste problema, recorreu-se a dois algoritmos conhecidos que operam sobre grafos: o algoritmo de \emph{Dijkstra} para cálculo das distâncias de todos os nós a uma determinada fonte e o algoritmo de \emph{Prim} para cálculo da árvore de expansão mínima do grafo. Para a implementação da fila de prioridades recorreu-se ao \emph{Heap de Fibonacci} da biblioteca \emph{Boost}. 
+Para a resolução deste problema, recorreu-se a dois algoritmos conhecidos que operam sobre grafos: o algoritmo de \emph{Dijkstra} para cálculo das distâncias mínimas de todos os nós a uma determinada fonte e o algoritmo de \emph{Prim} para cálculo da árvore de expansão mínima do grafo. Para a implementação da fila de prioridades recorreu-se ao \emph{Heap de Fibonacci} da biblioteca \emph{Boost}. 
 \subsubsection{Algoritmo de Dijkstra}
 
 \begin{algorithmic}[1]
@@ -186,7 +186,7 @@ No contexto da nossa aplicação optamos por utilizar uma implementação \emph{
 
 
 \subsection{Algoritmo de Dijkstra}
-Sendo \emph{V} o número de vértices a analisar e \emph{E} o número de arestas, o algoritmo percorre primeiramente toda a lista de vértices para inicializar valores. Esta operação tem complexidade \emph{V}.Acrescenta-se, com complexidade $O(1)$, a fonte à fila de prioridade. De seguida, percorre-se a fila de prioridade, recorrendo a função de extração do menor elemento da fila. Num \emph{heap de Fibonacci} esta operação corre em tempo $log(V)$. Obtém-se assim para este ciclo uma complexidade $Vlog(V)$. Dentro deste ciclo, todas as arestas do grafo acabam por ser analisadas, sendo, quando encontrada uma aresta que constitua um caminho mais favorável, chamada a função DecreaseKey do \emph{heap de Fibonacci}, que corre em tempo constante. Obtém-se assim uma complexidade linear $O(E)$.
+Sendo \emph{V} o número de vértices a analisar e \emph{E} o número de arestas, o algoritmo percorre primeiramente toda a lista de vértices para inicializar valores. Esta operação tem complexidade \emph{V}.Acrescenta-se, com complexidade $O(1)$, a fonte à fila de prioridade. De seguida, percorre-se a fila de prioridade, recorrendo à função de extração do menor elemento da fila. Num \emph{heap de Fibonacci} esta operação corre em tempo $log(V)$. Obtém-se assim para este ciclo uma complexidade $Vlog(V)$. Dentro deste ciclo, todas as arestas do grafo acabam por ser analisadas, sendo, quando encontrada uma aresta que constitua um caminho mais favorável, chamada a função DecreaseKey do \emph{heap de Fibonacci}, que corre em tempo constante. Obtém-se assim uma complexidade linear $O(E)$.
 
 Por último e como característica particular do problema em causa, torna-se necessário percorrer novamente a lista de vértices no sentido de remover todos aqueles cuja distância à fonte seja excessiva. Dentro deste ciclo pode ou não ser chamada a função removeVertex, que, na nossa implementação do grafo, tem complexidade $O(V^2+ E)$, ficando este ciclo com complexidade $O(V^3+VE)$. Tem-se assim uma complexidade total $O(V+E+Vlog(V)+V(V^2+E)) = O(E+V(VlogV+V^2+E)$.
 
@@ -222,7 +222,7 @@ Todos os membros contribuíram para o trabalho, desenvolvendo funcionalidades do
 \begin{description}
 \item[Francisco Veiga] Trabalhou no mecanismo de leitura de grafos a partir de um ficheiro de texto, na conceção e compreensão dos algoritmos a usar e nos mecanismos de teste empírico da performance dos mesmos;
 \item[João Cabral] Trabalhou na formalização matemática do problema, no algoritmo de Prim e na realização dos testes de performance empíricos e interface com o visualizador de grafos, bem como na elaboração do relatório;
-\item[João Mota] Trabalhou no mecanismo de leitura de grafos a partir de um ficheiro de texto, na conceção e compreensão dos algoritmos no algoritmo de Dijkstra adaptado para remover os vértices que se encontrem fora de um raio especifico.Implementou a totalidade da interface.
+\item[João Mota] Trabalhou no mecanismo de leitura de grafos a partir de um ficheiro de texto, na conceção e compreensão dos algoritmos e implementou o algoritmo de Dijkstra adaptado para remover os vértices que se encontrem fora de um raio especifico. Implementou a totalidade da interface.
 
 
 \end{description}
